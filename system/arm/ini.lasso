@@ -5,20 +5,20 @@
 	$arm_data->insert('language' = map)
 	$arm_data->insert('controller_root' = string)
 
-	define arm_lang( key::string ) => {
-		return $arm_data->find('language')->find(#key)
-	}
-
-	define arm_lang( content::pair ) => {
-		$arm_data->find('language')->insert( #content )
-	}
-
 	define arm_pref( name::string ) => {
 		return $arm_data->find('preferences')->find(#name)
 	}
 
 	define arm_pref( content::pair ) => {
 		$arm_data->find('preferences')->insert( #content )
+	}
+
+	define arm_lang( key::string ) => {
+		return $arm_data->find('language')->find(#key)
+	}
+
+	define arm_lang( content::pair ) => {
+		$arm_data->find('language')->insert( #content )
 	}
 
 	define Arm_Model => type {
@@ -140,17 +140,33 @@
 			.load_default_preferences()
 			.load_default_language()
 
+			.load_theme()
+
 			.load_controller( array('add-ons/','system/add-ons/','-default') )
 			.run_controller( .'controller' )
 
+		}
+
+		private load_default_preferences() => {
+			// The string passed to the [include] tag is broken, to 
+			// overcome an idiosycracy of BBEdit's code folding of 
+			// Lasso script.
+			include('preferences/' + 'public.lasso')
 		}
 
 		private load_default_language() => {
 			include('language/' + .pref( 'sys:default_language') + '.lasso')
 		}
 
-		private load_default_preferences() => {
-			include('preferences/public.lasso')
+		private load_theme() => {
+			.load_theme_preferences()
+			.load_theme_language()
+		}
+
+		private load_theme_preferences() => {
+		}
+
+		private load_theme_language() => {
 		}
 
 		private load_controller( a::array ) => {
@@ -163,7 +179,7 @@
 			}
 
 			if( #a( 1 ) == '-default' ) => {
-				#a( 1 ) = .pref( 'sys:default_addonlocation') // default controller-path from database
+				#a->get( 1 ) = .pref( 'sys:default_addonlocation') // default controller-path from database
 				.'controller' = .pref( 'sys:default_addonname') // default controller-name from database
 			}
 
