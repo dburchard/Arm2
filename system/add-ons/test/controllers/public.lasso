@@ -5,21 +5,21 @@
 
 		public index() => {
 			self->template
-			->set( 'out', 'This is the index() method in the Test controller.' )
+			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Index' )))
 			->title( 'Index Page' )
 			->build( 'default' )
 		}
 
 		public not_found() => {
 			self->template
-			->set( 'out', 'Wrong turn. Error 404.' )
+			->set( 'out', .lang( 'test.404_welcome' ))
 			->title( 'Error 404' )
 			->build( 'default' )
 		}
 
 		public foo() => {
 			self->template
-			->set( 'out', 'This is the foo() method in the Test controller.' )
+			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Index' )))
 			->title( 'Foo' )
 			->build( 'default' )
 		}
