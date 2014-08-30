@@ -17,8 +17,10 @@
 		return $arm_data->find( 'template_body' )
 	}
 
-	define arm_pref( name::string ) => {
-		return $arm_data->find('preferences')->find(#name)
+	define arm_pref( key::string ) => {
+		local( 'o' = $arm_data->find('preferences')->find(#key) )
+		fail_if( #o->type == void->type, -1, 'Preference key "' + #key + '" not found.' )
+		return #o
 	}
 
 	define arm_pref( content::pair ) => {
@@ -26,7 +28,9 @@
 	}
 
 	define arm_lang( key::string ) => {
-		return $arm_data->find('language')->find(#key)
+		local( 'o' = $arm_data->find('language')->find(#key) )
+		fail_if( #o->type == void->type, -1, 'Language key "' + #key + '" not found.' )
+		return #o
 	}
 
 	define arm_lang( content::pair ) => {
@@ -167,7 +171,10 @@
 			.load_theme_preferences()
 			.load_theme_language()
 
-			.load_controller( array('add-ons/','system/add-ons/','-default') )
+			.load_addon( array('add-ons/','system/add-ons/','-default') )
+			.load_addon_preferences()
+			.load_addon_language()
+
 			.run_controller( .'controller' )
 
 		}
@@ -196,7 +203,7 @@
 			include($arm_data->find('theme_location') + $arm_data->find('theme_name') + '/language/' + .pref( 'sys:default_language') + '.lasso')
 		}
 
-		private load_controller( a::array ) => {
+		private load_addon( a::array ) => {
 
 			.'controller' = .path( 1 )
 
@@ -218,10 +225,18 @@
 			
 			if( NOT #file_found ) => {
 				#a->remove( 1 )
-				.load_controller( #a )
+				.load_addon( #a )
 			}
 
 			$arm_data->find( 'controller_root' ) = #a( 1 ) + .'controller'
+		}
+
+		private load_addon_preferences() => {
+			include($arm_data->find('controller_root') + '/preferences/public.lasso')
+		}
+
+		private load_addon_language() => {
+			include($arm_data->find('controller_root') + '/language/' + .pref( 'sys:default_language') + '.lasso')
 		}
 
 	}
