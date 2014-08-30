@@ -19,6 +19,9 @@
 
 	define arm_pref( key::string ) => {
 		local( 'o' = $arm_data->find('preferences')->find(#key) )
+		// This error message is hard coded, because utilizing
+		// the default language-file could cause an error, or
+		// an infinite loop, at this point in the code.
 		fail_if( #o->type == void->type, -1, 'Preference key "' + #key + '" not found.' )
 		return #o
 	}
@@ -29,6 +32,9 @@
 
 	define arm_lang( key::string ) => {
 		local( 'o' = $arm_data->find('language')->find(#key) )
+		// This error message is hard coded, because utilizing
+		// the default language-file could cause an error, or
+		// an infinite loop, at this point in the code.
 		fail_if( #o->type == void->type, -1, 'Language key "' + #key + '" not found.' )
 		return #o
 	}
@@ -73,8 +79,25 @@
 			.'variables'->foreach => {
 				var(#1->name = #1->value)
 			}
-			$arm_data->insert( 'view_body' = include( .'controller'->root_directory + '/views/' + .'file_name' + '.lasso' ))
-			web_response->rawcontent = include( $arm_data->find('theme_location') + $arm_data->find('theme_name') + '/templates/' + $arm_data->find('theme_name') + '.lasso' )
+			$arm_data->insert( 'view_body' = include(
+
+				.'controller'->root_directory + 
+				'/' + 
+				.'controller'->pref('sys:view_path') + 
+				.'file_name' + 
+				.'controller'->pref( 'sys:file_suffix')
+			))
+
+			web_response->rawcontent = include(
+
+				.'controller'->pref('sys:theme_path') + 
+				$arm_data->find('theme_name') + 
+				'/' + 
+				.'controller'->pref('sys:template_path') + 
+				$arm_data->find('theme_name') + 
+				.'controller'->pref( 'sys:file_suffix')
+
+			)
 			return self
 		}
 	}
@@ -174,7 +197,12 @@
 			.load_theme_preferences()
 			.load_theme_language()
 
-			.load_addon( array('add-ons/','system/add-ons/','-default') )
+			local( 'path' = .pref('sys:addon_path')->ascopy->asarray )
+			#path->foreach => {
+				#1->append( .path(1) )
+			}
+			#path->insert( .pref( 'sys:default_addon' ) )
+			.load_addon( #path )
 			.load_addon_preferences()
 			.load_addon_language()
 
@@ -186,44 +214,63 @@
 			// The string passed to the [include] tag is broken, to 
 			// overcome an idiosycracy of BBEdit's code folding of 
 			// Lasso script.
-			include('preferences/' + 'default_p.lasso')
+			include( 'preferences/' + 'default_p.lasso' )
 		}
 
 		private load_default_language() => {
-			include('language/' + .pref( 'sys:default_language') + '.lasso')
+			include(
+				.pref( 'sys:language_path' ) +
+				.pref( 'sys:default_language' ) +
+				.pref( 'sys:file_suffix' )
+			)
 		}
 
 		private load_theme() => {
-			$arm_data->insert( 'theme_name' = .pref('sys:default_themename'))
-			$arm_data->insert( 'theme_location' = .pref('sys:default_themelocation'))
+			$arm_data->insert( 'theme_name' = .pref('sys:default_theme'))
 		}
 
 		private load_theme_preferences() => {
-			include($arm_data->find('theme_location') + $arm_data->find('theme_name') + '/preferences/' + $arm_data->find('theme_name') + '_p.lasso')
+			include(
+				.pref( 'sys:theme_path' ) +
+				$arm_data->find( 'theme_name')  +
+				'/' +
+				.pref( 'sys:preference_path' ) +
+				$arm_data->find('theme_name' ) +
+				.pref( 'sys:preference_suffix' ) +
+				.pref( 'sys:file_suffix' )
+			)
 		}
 
 		private load_theme_language() => {
-			include($arm_data->find('theme_location') + $arm_data->find('theme_name') + '/language/' + .pref( 'sys:default_language') + '.lasso')
+			include(
+				.pref( 'sys:theme_path' ) +
+				$arm_data->find('theme_name' ) +
+				'/' +
+				.pref( 'sys:language_path' ) +
+				.pref( 'sys:default_language' ) +
+				.pref( 'sys:file_suffix' )
+			)
 		}
 
 		private load_addon( a::array ) => {
 
-			.'addon_name' = .path( 1 )
+			.'addon_name' = #a( 1 )->split( '/' )->last
 
 			if( #a->size == 0 ) => {
 				fail( -1, .lang( 'sys.controller_error', (: '@cont' = .'addon_name' )))
 				return
 			}
 
-			if( #a( 1 ) == '-default' ) => {
-				#a->get( 1 ) = .pref( 'sys:default_addonlocation')
-				.'addon_name' = .pref( 'sys:default_addonname')
-			}
-
 			local('file_found' = TRUE)
 			protect => {
 				handle_failure => { #file_found = FALSE }
-				library_once( #a( 1 ) + .'addon_name' + '/controllers/' + .'addon_name' + '.lasso' )
+				library_once(
+					#a( 1 ) +
+					'/' +
+					.pref( 'sys:controller_path' ) +
+					.'addon_name' +
+					.pref( 'sys:file_suffix' )
+				)
 			}
 			
 			if( NOT #file_found ) => {
@@ -231,15 +278,31 @@
 				.load_addon( #a )
 			}
 
-			$arm_data->find( 'controller_root' ) = #a( 1 ) + .'addon_name'
+			$arm_data->find( 'controller_root' ) = #a( 1 )
 		}
 
 		private load_addon_preferences() => {
-			include($arm_data->find('controller_root') + '/preferences/' + .'addon_name' + '_p.lasso')
+			include(
+				$arm_data->find( 'controller_root' ) +
+				'/' +
+				.pref( 'sys:preference_path' ) +
+				.'addon_name' +
+				.pref( 'sys:preference_suffix' ) +
+				.pref( 'sys:file_suffix' )
+			)
 		}
 
 		private load_addon_language() => {
-			include($arm_data->find('controller_root') + '/language/' + .'addon_name' + '_l.' + .pref( 'sys:default_language') + '.lasso')
+			include(
+				$arm_data->find( 'controller_root' ) +
+				'/' +
+				.pref( 'sys:language_path' ) +
+				.'addon_name' +
+				.pref( 'sys:language_suffix' ) +
+				'.' +
+				.pref( 'sys:default_language' ) +
+				.pref( 'sys:file_suffix' )
+			)
 		}
 
 	}
