@@ -7,21 +7,21 @@
 			self->template
 			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Index' )))
 			->title( 'Index Page' )
-			->build( 'default' )
+			->build( 'test_v' )
 		}
 
 		public not_found() => {
 			self->template
 			->set( 'out', .lang( 'test.404_welcome' ))
 			->title( 'Error 404' )
-			->build( 'default' )
+			->build( 'test_v' )
 		}
 
 		public foo() => {
 			self->template
 			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Index' )))
 			->title( 'Foo' )
-			->build( 'default' )
+			->build( 'test_v' )
 		}
 
 	}
