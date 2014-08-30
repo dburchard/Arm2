@@ -4,21 +4,21 @@
 		parent Arm_PublicController
 
 		public index() => {
-			self->template
+			self->view
 			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Index' )))
 			->title( 'Index Page' )
 			->build( 'test_v' )
 		}
 
 		public not_found() => {
-			self->template
+			self->view
 			->set( 'out', .lang( 'test.404_welcome' ))
 			->title( 'Error 404' )
 			->build( 'test_v' )
 		}
 
 		public foo() => {
-			self->template
+			self->view
 			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Index' )))
 			->title( 'Foo' )
 			->build( 'test_v' )
