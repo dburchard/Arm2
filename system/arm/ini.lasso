@@ -3,7 +3,7 @@
 	var('arm_data' = map)
 	$arm_data->insert('preferences' = map)
 	$arm_data->insert('language' = map)
-	$arm_data->insert('controller_root' = string)
+	$arm_data->insert('addon_root' = string)
 
 	define sourcefile->view_title() => {
 		return $arm_data->find( 'view_title' )
@@ -115,7 +115,7 @@
 		}
 
 		public root_directory() => {
-			return $arm_data->find( 'controller_root' )
+			return $arm_data->find( 'addon_root' )
 		}
 
 		public lang( key::string, params::staticarray = staticarray ) => {
@@ -278,12 +278,12 @@
 				.load_addon( #a )
 			}
 
-			$arm_data->find( 'controller_root' ) = #a( 1 )
+			$arm_data->find( 'addon_root' ) = #a( 1 )
 		}
 
 		private load_addon_preferences() => {
 			include(
-				$arm_data->find( 'controller_root' ) +
+				$arm_data->find( 'addon_root' ) +
 				'/' +
 				.pref( 'sys:preference_path' ) +
 				.'addon_name' +
@@ -294,7 +294,7 @@
 
 		private load_addon_language() => {
 			include(
-				$arm_data->find( 'controller_root' ) +
+				$arm_data->find( 'addon_root' ) +
 				'/' +
 				.pref( 'sys:language_path' ) +
 				.'addon_name' +
