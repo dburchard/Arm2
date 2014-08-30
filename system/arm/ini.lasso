@@ -5,6 +5,18 @@
 	$arm_data->insert('language' = map)
 	$arm_data->insert('controller_root' = string)
 
+	define sourcefile->template_title() => {
+		return $arm_data->find( 'template_title' )
+	}
+
+	define sourcefile->template_metadata() => {
+		return $arm_data->find( 'template_metadata' )
+	}
+
+	define sourcefile->template_body() => {
+		return $arm_data->find( 'template_body' )
+	}
+
 	define arm_pref( name::string ) => {
 		return $arm_data->find('preferences')->find(#name)
 	}
@@ -38,6 +50,16 @@
 			return self
 		}
 
+		public title( v::string ) => {
+			$arm_data->insert( 'template_title' = #v )
+			return self
+		}
+
+		public metadata( v::string ) => {
+			$arm_data->insert( 'template_metadata' = #v )
+			return self
+		}
+
 		public build( t::string ) => {
 			.'template' = #t
 			return .build
@@ -47,7 +69,8 @@
 			.'variables'->foreach => {
 				var(#1->name = #1->value)
 			}
-			web_response->rawcontent = include( .'controller'->root_directory + '/views/' + .'template' + '.lasso')
+			$arm_data->insert( 'template_body' = include( .'controller'->root_directory + '/views/' + .'template' + '.lasso' ))
+			web_response->rawcontent = include( $arm_data->find('theme_location') + $arm_data->find('theme_name') + '/views/' + $arm_data->find('theme_name') + '.lasso' )
 			return self
 		}
 	}
@@ -141,6 +164,8 @@
 			.load_default_language()
 
 			.load_theme()
+			.load_theme_preferences()
+			.load_theme_language()
 
 			.load_controller( array('add-ons/','system/add-ons/','-default') )
 			.run_controller( .'controller' )
@@ -159,14 +184,16 @@
 		}
 
 		private load_theme() => {
-			.load_theme_preferences()
-			.load_theme_language()
+			$arm_data->insert( 'theme_name' = .pref('sys:default_themename'))
+			$arm_data->insert( 'theme_location' = .pref('sys:default_themelocation'))
 		}
 
 		private load_theme_preferences() => {
+			include($arm_data->find('theme_location') + $arm_data->find('theme_name') + '/preferences/public.lasso')
 		}
 
 		private load_theme_language() => {
+			include($arm_data->find('theme_location') + $arm_data->find('theme_name') + '/language/' + .pref( 'sys:default_language') + '.lasso')
 		}
 
 		private load_controller( a::array ) => {
