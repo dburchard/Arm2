@@ -186,7 +186,7 @@
 			// The string passed to the [include] tag is broken, to 
 			// overcome an idiosycracy of BBEdit's code folding of 
 			// Lasso script.
-			include('preferences/' + 'public.lasso')
+			include('preferences/' + 'default_p.lasso')
 		}
 
 		private load_default_language() => {
@@ -199,7 +199,7 @@
 		}
 
 		private load_theme_preferences() => {
-			include($arm_data->find('theme_location') + $arm_data->find('theme_name') + '/preferences/public.lasso')
+			include($arm_data->find('theme_location') + $arm_data->find('theme_name') + '/preferences/' + $arm_data->find('theme_name') + '_p.lasso')
 		}
 
 		private load_theme_language() => {
@@ -223,7 +223,7 @@
 			local('file_found' = TRUE)
 			protect => {
 				handle_failure => { #file_found = FALSE }
-				library_once( #a( 1 ) + .'controller' + '/controllers/public.lasso' )
+				library_once( #a( 1 ) + .'controller' + '/controllers/' + .'controller' + '.lasso' )
 			}
 			
 			if( NOT #file_found ) => {
@@ -235,7 +235,7 @@
 		}
 
 		private load_addon_preferences() => {
-			include($arm_data->find('controller_root') + '/preferences/public.lasso')
+			include($arm_data->find('controller_root') + '/preferences/' + .'controller' + '_p.lasso')
 		}
 
 		private load_addon_language() => {
