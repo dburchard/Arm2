@@ -1,6 +1,6 @@
 <?lassoscript
 
-	define Test_Controller => type {
+	define Test => type {
 		parent Arm_PublicController
 
 		public index() => {

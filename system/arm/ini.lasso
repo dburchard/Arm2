@@ -84,7 +84,7 @@
 		data protected template		=	NULL
 
 		public path( segment::integer = -1) => {
-			local( 'path' = client_getparam( 'ap' )->split( '/' )) // ••••••
+			local( 'path' = client_getparam( .pref( 'sys:path_argument') )->split( '/' ))
 			if( #segment <= #path->size AND #segment > 0 ) => {
 				return( #path->get( #segment ) )
 			}
@@ -120,7 +120,7 @@
 		}
 
 		protected run_controller( c::string ) => {
-			escape_tag( #c + '_controller' )->invoke->run_method( (.path( 2 ) === NULL ? '' | .path( 2 )))
+			escape_tag( #c )->invoke->run_method( (.path( 2 ) === NULL ? '' | .path( 2 )))
 		}
 
 		protected run_method( p::string ) => {
@@ -163,6 +163,9 @@
 		data controller				=	NULL
 
 		public oncreate() => {
+
+			// .load_database()
+			// .load_environment()
 
 			.load_default_preferences()
 			.load_default_language()
@@ -208,13 +211,13 @@
 			.'controller' = .path( 1 )
 
 			if( #a->size == 0 ) => {
-				fail( -1, 'The requested controller "' + .'controller' + '_controller" does not exist.' ) // ••••••
+				fail( -1, .lang( 'sys.controller_error', (: '@cont' = .'controller' )))
 				return
 			}
 
 			if( #a( 1 ) == '-default' ) => {
-				#a->get( 1 ) = .pref( 'sys:default_addonlocation') // default controller-path from database
-				.'controller' = .pref( 'sys:default_addonname') // default controller-name from database
+				#a->get( 1 ) = .pref( 'sys:default_addonlocation')
+				.'controller' = .pref( 'sys:default_addonname')
 			}
 
 			local('file_found' = TRUE)

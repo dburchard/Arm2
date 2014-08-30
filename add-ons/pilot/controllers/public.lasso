@@ -1,6 +1,6 @@
 <?lassoscript
 
-	define Pilot_Controller => type {
+	define Pilot => type {
 		parent Arm_PublicController
 
 		public index() => {
