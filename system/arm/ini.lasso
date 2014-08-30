@@ -239,7 +239,7 @@
 		}
 
 		private load_addon_language() => {
-			include($arm_data->find('controller_root') + '/language/' + .pref( 'sys:default_language') + '.lasso')
+			include($arm_data->find('controller_root') + '/language/' + .'controller' + '_l.' + .pref( 'sys:default_language') + '.lasso')
 		}
 
 	}
