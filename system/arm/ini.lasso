@@ -5,16 +5,16 @@
 	$arm_data->insert('language' = map)
 	$arm_data->insert('controller_root' = string)
 
-	define sourcefile->template_title() => {
-		return $arm_data->find( 'template_title' )
+	define sourcefile->view_title() => {
+		return $arm_data->find( 'view_title' )
 	}
 
-	define sourcefile->template_metadata() => {
-		return $arm_data->find( 'template_metadata' )
+	define sourcefile->view_metadata() => {
+		return $arm_data->find( 'view_metadata' )
 	}
 
-	define sourcefile->template_body() => {
-		return $arm_data->find( 'template_body' )
+	define sourcefile->view_body() => {
+		return $arm_data->find( 'view_body' )
 	}
 
 	define arm_pref( key::string ) => {
@@ -43,7 +43,7 @@
 	define Arm_View => type {
 		data protected controller	=	NULL
 		data protected variables	=	ARRAY
-		data protected template		=	STRING
+		data protected file_name		=	STRING
 
 		public set_controller( c::any ) => {
 			.'controller' = #c
@@ -55,17 +55,17 @@
 		}
 
 		public title( v::string ) => {
-			$arm_data->insert( 'template_title' = #v )
+			$arm_data->insert( 'view_title' = #v )
 			return self
 		}
 
 		public metadata( v::string ) => {
-			$arm_data->insert( 'template_metadata' = #v )
+			$arm_data->insert( 'view_metadata' = #v )
 			return self
 		}
 
 		public build( t::string ) => {
-			.'template' = #t
+			.'file_name' = #t
 			return .build
 		}
 
@@ -73,15 +73,15 @@
 			.'variables'->foreach => {
 				var(#1->name = #1->value)
 			}
-			$arm_data->insert( 'template_body' = include( .'controller'->root_directory + '/views/' + .'template' + '.lasso' ))
-			web_response->rawcontent = include( $arm_data->find('theme_location') + $arm_data->find('theme_name') + '/views/' + $arm_data->find('theme_name') + '.lasso' )
+			$arm_data->insert( 'view_body' = include( .'controller'->root_directory + '/views/' + .'file_name' + '.lasso' ))
+			web_response->rawcontent = include( $arm_data->find('theme_location') + $arm_data->find('theme_name') + '/templates/' + $arm_data->find('theme_name') + '.lasso' )
 			return self
 		}
 	}
 
 	define Arm_PublicController => type {
 
-		data protected template		=	NULL
+		data protected view		=	NULL
 
 		public path( segment::integer = -1) => {
 			local( 'path' = client_getparam( .pref( 'sys:path_argument') )->split( '/' ))
@@ -111,12 +111,12 @@
 			return #pref
 		}
 
-		protected template( c::string = '' ) => {
-			if( .'template'->type != Arm_View->type ) => {
-				.'template' = Arm_View
-				.'template'->set_controller( self )
+		protected view( c::string = '' ) => {
+			if( .'view'->type != Arm_View->type ) => {
+				.'view' = Arm_View
+				.'view'->set_controller( self )
 			}
-			return .'template'
+			return .'view'
 		}
 
 		protected run_controller( c::string ) => {
@@ -160,7 +160,7 @@
 	define Arm => type {
 		parent Arm_PublicController
 
-		data controller				=	NULL
+		data addon_name				=	NULL
 
 		public oncreate() => {
 
@@ -178,7 +178,7 @@
 			.load_addon_preferences()
 			.load_addon_language()
 
-			.run_controller( .'controller' )
+			.run_controller( .'addon_name' )
 
 		}
 
@@ -208,22 +208,22 @@
 
 		private load_addon( a::array ) => {
 
-			.'controller' = .path( 1 )
+			.'addon_name' = .path( 1 )
 
 			if( #a->size == 0 ) => {
-				fail( -1, .lang( 'sys.controller_error', (: '@cont' = .'controller' )))
+				fail( -1, .lang( 'sys.controller_error', (: '@cont' = .'addon_name' )))
 				return
 			}
 
 			if( #a( 1 ) == '-default' ) => {
 				#a->get( 1 ) = .pref( 'sys:default_addonlocation')
-				.'controller' = .pref( 'sys:default_addonname')
+				.'addon_name' = .pref( 'sys:default_addonname')
 			}
 
 			local('file_found' = TRUE)
 			protect => {
 				handle_failure => { #file_found = FALSE }
-				library_once( #a( 1 ) + .'controller' + '/controllers/' + .'controller' + '.lasso' )
+				library_once( #a( 1 ) + .'addon_name' + '/controllers/' + .'addon_name' + '.lasso' )
 			}
 			
 			if( NOT #file_found ) => {
@@ -231,15 +231,15 @@
 				.load_addon( #a )
 			}
 
-			$arm_data->find( 'controller_root' ) = #a( 1 ) + .'controller'
+			$arm_data->find( 'controller_root' ) = #a( 1 ) + .'addon_name'
 		}
 
 		private load_addon_preferences() => {
-			include($arm_data->find('controller_root') + '/preferences/' + .'controller' + '_p.lasso')
+			include($arm_data->find('controller_root') + '/preferences/' + .'addon_name' + '_p.lasso')
 		}
 
 		private load_addon_language() => {
-			include($arm_data->find('controller_root') + '/language/' + .'controller' + '_l.' + .pref( 'sys:default_language') + '.lasso')
+			include($arm_data->find('controller_root') + '/language/' + .'addon_name' + '_l.' + .pref( 'sys:default_language') + '.lasso')
 		}
 
 	}
