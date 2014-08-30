@@ -187,26 +187,29 @@
 
 		public oncreate() => {
 
-			// .load_database()
-			// .load_environment()
-
 			.load_default_preferences()
 			.load_default_language()
 
-			.load_theme()
-			.load_theme_preferences()
-			.load_theme_language()
+			inline(
+					web_request->params,
+					.pref( 'sys:development_database' ),
+					-nothing) => {
 
-			local( 'path' = .pref('sys:addon_path')->ascopy->asarray )
-			#path->foreach => {
-				#1->append( .path(1) )
+				.load_theme()
+				.load_theme_preferences()
+				.load_theme_language()
+
+				local( 'path' = .pref('sys:addon_path')->ascopy->asarray )
+				#path->foreach => {
+					#1->append( .path(1) )
+				}
+				#path->insert( .pref( 'sys:default_addon' ) )
+				.load_addon( #path )
+				.load_addon_preferences()
+				.load_addon_language()
+
+				.run_controller( .'addon_name' )
 			}
-			#path->insert( .pref( 'sys:default_addon' ) )
-			.load_addon( #path )
-			.load_addon_preferences()
-			.load_addon_language()
-
-			.run_controller( .'addon_name' )
 
 		}
 
