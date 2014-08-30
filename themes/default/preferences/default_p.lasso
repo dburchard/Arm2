@@ -1,6 +1,6 @@
 <?lassoscript
 
-arm_pref('dtheme:default_view'			=	'default_v')
+arm_pref('dtheme:example_pref'			=	'ap')
 
 ?>
 EOF
