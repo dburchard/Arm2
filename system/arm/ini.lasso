@@ -82,7 +82,6 @@
 			$arm_data->insert( 'view_body' = include(
 
 				.'controller'->root_directory + 
-				'/' + 
 				.'controller'->pref('sys:view_path') + 
 				.'file_name' + 
 				.'controller'->pref( 'sys:file_suffix')
@@ -140,6 +139,35 @@
 				.'view'->set_controller( self )
 			}
 			return .'view'
+		}
+
+		protected load_library( c::string ) => {
+			protect => {
+				(: .pref( 'sys:library_path' ), $arm_data->find( 'addon_root' ) + .pref( 'sys:library_path' ) )->foreach => {
+					library_once(
+						#1 +
+						#c +
+						.pref( 'sys:file_suffix' )
+					)
+				}
+			}
+		}
+
+		protected load_model( c::string ) => {
+			library_once(
+				$arm_data->find( 'addon_root' ) +
+				.pref( 'sys:model_path' ) +
+				#c +
+				.pref( 'sys:file_suffix' )
+			)
+		}
+
+		protected load_controller( c::string ) => {
+			library_once(
+				.pref( 'sys:controller_path' ) +
+				#c +
+				.pref( 'sys:file_suffix' )
+			)
 		}
 
 		protected run_controller( c::string ) => {
@@ -201,7 +229,7 @@
 
 				local( 'path' = .pref('sys:addon_path')->ascopy->asarray )
 				#path->foreach => {
-					#1->append( .path(1) )
+					#1->append( .path(1) + '/' )
 				}
 				#path->insert( .pref( 'sys:default_addon' ) )
 				.load_addon( #path )
@@ -257,7 +285,9 @@
 
 		private load_addon( a::array ) => {
 
-			.'addon_name' = #a( 1 )->split( '/' )->last
+			local( 'n' = #a( 1 )->ascopy )
+			#n->removetrailing( '/' )
+			.'addon_name' = #n->split( '/' )->last
 
 			if( #a->size == 0 ) => {
 				fail( -1, .lang( 'sys.controller_error', (: '@cont' = .'addon_name' )))
@@ -269,7 +299,6 @@
 				handle_failure => { #file_found = FALSE }
 				library_once(
 					#a( 1 ) +
-					'/' +
 					.pref( 'sys:controller_path' ) +
 					.'addon_name' +
 					.pref( 'sys:file_suffix' )
@@ -287,7 +316,6 @@
 		private load_addon_preferences() => {
 			include(
 				$arm_data->find( 'addon_root' ) +
-				'/' +
 				.pref( 'sys:preference_path' ) +
 				.'addon_name' +
 				.pref( 'sys:preference_suffix' ) +
@@ -298,7 +326,6 @@
 		private load_addon_language() => {
 			include(
 				$arm_data->find( 'addon_root' ) +
-				'/' +
 				.pref( 'sys:language_path' ) +
 				.'addon_name' +
 				.pref( 'sys:language_suffix' ) +

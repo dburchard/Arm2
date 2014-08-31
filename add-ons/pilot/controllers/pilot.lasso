@@ -3,9 +3,14 @@
 	define Pilot => type {
 		parent Arm_PublicController
 
+		public oncreate() => {
+			.load_library( 'mytag' )
+			.load_model( 'pilot_m' )
+		}
+
 		public index() => {
 			self->view
-			->set( 'out', .lang( 'pilot.method_welcome', (: '@mname' = 'Index' )))
+			->set( 'out', .lang( 'pilot.method_welcome', (: '@mname' = 'Index' )) + ' ' + mytag)
 			->title( 'Index Page' )
 			->build( 'pilot_v' )
 		}
