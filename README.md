@@ -23,6 +23,49 @@ Clone as Git: git clone https://github.com/dburchard/Arm2
 Checkout as SVN: svn export https://github.com/dburchard/Arm2
 
 Setup
+After installing the Arm Framework into it's intended location, about the only two things remaining to setup are the URL redirection, and a few preferences. We'll begin with the URL rewriting.
+
+Most web servers have some sort of URL rewriting mechanism. In the case of Apache, it's usually mod_rewrite. The following code is appropriate for an .htaccess file at the root of your Arm instalation.
+
+	RewriteEngine On
+
+	RewriteRule ^ - [E=ARM_ENV:development]
+
+	# Explicitely allow direct access to existing files.
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+
+	# Take everything following the directory name, 
+	# place it into an argument named "page", and 
+	# redirect the request to index.lasso.
+
+	RewriteRule ^(.*)$ index.lasso?ap=$1 [PT,NC,L,QSA]
+
+
+In a virtual host definition, this might look more like the following.
+
+	<VirtualHost *:80>
+		ServerName www.example.com
+		DocumentRoot /Library/WebServer/Documents/example
+		CustomLog "/private/var/log/apache2/example-access_log" combined
+		ErrorLog "/private/var/log/apache2/example-error_log"
+		ServerAdmin webmaster@example.com
+		HostnameLookups Off
+		DirectoryIndex index.lasso
+		SetEnv ARM_ENV development
+		RewriteEngine On
+		RewriteCond /Library/WebServer/Documents/example/%{REQUEST_FILENAME} !-f
+		RewriteCond /Library/WebServer/Documents/example/%{REQUEST_FILENAME} !-d
+		RewriteRule ^(.*)$ /index.lasso?/$1 [PT,L,NC,NE,QSA]
+	</VirtualHost>
+
+
+Make sure to read the documentation for your server software. The above might take some fiddling if your version of Apache is significantly different than mine. I'll amend this portion of the documentation as I find out more about other servers. Please let me know your experience.
+
+
+
+
+
 
 
 BUILDING A WEB APPLICATION

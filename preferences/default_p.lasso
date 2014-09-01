@@ -1,5 +1,7 @@
 <?lassoscript
 
+/*
+*/
 arm_pref('sys:development_database'	=	array(
 
 	-Host				=	array(
@@ -36,13 +38,32 @@ arm_pref('sys:production_database'	=	array(
 
 ))
 
-arm_pref('sys:path_argument'			=	'ap')
+/*
+	This preference established the language file(s) to load, 
+	along with any languages identified by the client's 
+	accept-language field.
+*/
 arm_pref('sys:default_language'			=	'en')
 
+/*
+	This preference sets the default theme to use.
+*/
 arm_pref('sys:default_theme'			=	'default')
 
-arm_pref('sys:addon_path'				=	(: 'add-ons/','system/add-ons/' ))
+/*
+	This preference sets the addon to call, when no controller
+	is specified in the client's web request.
+*/
 arm_pref('sys:default_addon'			=	'system/add-ons/test/')
+
+/*
+	Chances are, you will have no need to modify any of the 
+	preferences below this comment.
+	===========================================================
+*/
+
+arm_pref('sys:path_argument'			=	'ap')
+arm_pref('sys:addon_path'				=	(: 'add-ons/','system/add-ons/' ))
 
 arm_pref('sys:theme_path'				=	'themes/')
 arm_pref('sys:model_path'				=	'models/')
