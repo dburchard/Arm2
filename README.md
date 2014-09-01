@@ -56,8 +56,5 @@ Creating a Theme
 
 
 TODO
-1. pull the prefered language from the web request.
-2. do we *really* need folders for the preferences files? 
-	perhaps move them to pilot_setup.lasso?
 
 
