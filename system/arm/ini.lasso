@@ -241,6 +241,28 @@
 
 		}
 
+		private accepted_language() => {
+			local( 'x' = FALSE)
+			local( 's' = '')
+			web_request->httpAcceptLanguage->split('')->foreach => {
+				(string_isalpha( #1 ) OR #1 == '-' OR #1 == ',') AND NOT #x ? #s->append( #1 ) | #x = TRUE
+			}
+			#s->lowercase
+			#s = #s->split(',')
+			NOT #s->contains( .pref( 'sys:default_language' ) ) ? #s->insert( .pref( 'sys:default_language' ) )
+			#s->reverse
+			return #s
+		}
+
+		private load_language_file( filepath::string ) => {
+			.accepted_language()->foreach => {
+				local( 'p' = #filepath + #1 + .pref( 'sys:file_suffix' ))
+				protect => {
+					include( #p )
+				}
+			}
+		}
+
 		private load_default_preferences() => {
 			// The string passed to the [include] tag is broken, to 
 			// overcome an idiosycracy of BBEdit's code folding of 
@@ -249,11 +271,7 @@
 		}
 
 		private load_default_language() => {
-			include(
-				.pref( 'sys:language_path' ) +
-				.pref( 'sys:default_language' ) +
-				.pref( 'sys:file_suffix' )
-			)
+			.load_language_file( .pref( 'sys:language_path' ) )
 		}
 
 		private load_theme() => {
@@ -273,13 +291,13 @@
 		}
 
 		private load_theme_language() => {
-			include(
+			.load_language_file(
 				.pref( 'sys:theme_path' ) +
 				$arm_data->find('theme_name' ) +
 				'/' +
 				.pref( 'sys:language_path' ) +
-				.pref( 'sys:default_language' ) +
-				.pref( 'sys:file_suffix' )
+				$arm_data->find('theme_name' ) +
+				'.'
 			)
 		}
 
@@ -324,14 +342,11 @@
 		}
 
 		private load_addon_language() => {
-			include(
+			.load_language_file( 
 				$arm_data->find( 'addon_root' ) +
 				.pref( 'sys:language_path' ) +
 				.'addon_name' +
-				.pref( 'sys:language_suffix' ) +
-				'.' +
-				.pref( 'sys:default_language' ) +
-				.pref( 'sys:file_suffix' )
+				'.'
 			)
 		}
 

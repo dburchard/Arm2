@@ -54,7 +54,6 @@ arm_pref('sys:preference_path'			=	'preferences/')
 arm_pref('sys:language_path'			=	'language/')
 
 arm_pref('sys:preference_suffix'		=	'_p')
-arm_pref('sys:language_suffix'			=	'_l')
 arm_pref('sys:file_suffix'				=	'.lasso')
 
 ?>
