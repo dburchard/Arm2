@@ -53,6 +53,7 @@ arm_pref('sys:partial_path'				=	'partials/')
 arm_pref('sys:library_path'				=	'libraries/')
 arm_pref('sys:preference_path'			=	'preferences/')
 arm_pref('sys:language_path'			=	'language/')
+arm_pref('sys:path_delimiter'			=	'/')
 
 arm_pref('sys:preference_suffix'		=	'_p')
 arm_pref('sys:file_suffix'				=	'.lasso')

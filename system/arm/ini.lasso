@@ -18,10 +18,10 @@
 	}
 
 	define sourcefile->partial( loc::string ) => {
-		local( 'current_path' = Include_CurrentPath->split( '/' ) )
+		local( 'current_path' = Include_CurrentPath->split( arm_pref('sys:path_delimiter') ) )
 		#current_path->removelast
-		#current_path = #current_path->join( '/' )
-		return include( #current_path + '/' + arm_pref( 'sys:partial_path' ) + #loc + arm_pref( 'sys:file_suffix' ))
+		#current_path = #current_path->join( arm_pref('sys:path_delimiter') )
+		return include( #current_path + arm_pref('sys:path_delimiter') + arm_pref( 'sys:partial_path' ) + #loc + arm_pref( 'sys:file_suffix' ))
 	}
 
 	define arm_pref( key::string ) => {
@@ -98,7 +98,7 @@
 
 				.'controller'->pref('sys:theme_path') + 
 				$arm_data->find('theme_name') + 
-				'/' + 
+				.'controller'->pref('sys:path_delimiter') + 
 				.'controller'->pref('sys:template_path') + 
 				$arm_data->find('theme_name') + 
 				.'controller'->pref( 'sys:file_suffix')
@@ -113,7 +113,7 @@
 		data protected view		=	NULL
 
 		public path( segment::integer = -1) => {
-			local( 'path' = client_getparam( .pref( 'sys:path_argument') )->split( '/' ))
+			local( 'path' = client_getparam( .pref( 'sys:path_argument') )->split( .pref('sys:path_delimiter') ))
 			if( #segment <= #path->size AND #segment > 0 ) => {
 				return( #path->get( #segment ) )
 			}
@@ -236,7 +236,7 @@
 
 				local( 'path' = .pref('sys:addon_path')->ascopy->asarray )
 				#path->foreach => {
-					#1->append( .path(1) + '/' )
+					#1->append( .path(1) + .pref('sys:path_delimiter') )
 				}
 				#path->insert( .pref( 'sys:default_addon' ) )
 				.load_addon( #path )
@@ -289,7 +289,7 @@
 			include(
 				.pref( 'sys:theme_path' ) +
 				$arm_data->find( 'theme_name')  +
-				'/' +
+				.pref('sys:path_delimiter') +
 				.pref( 'sys:preference_path' ) +
 				$arm_data->find('theme_name' ) +
 				.pref( 'sys:preference_suffix' ) +
@@ -301,7 +301,7 @@
 			.load_language_file(
 				.pref( 'sys:theme_path' ) +
 				$arm_data->find('theme_name' ) +
-				'/' +
+				.pref('sys:path_delimiter') +
 				.pref( 'sys:language_path' ) +
 				$arm_data->find('theme_name' ) +
 				'.'
@@ -311,8 +311,8 @@
 		private load_addon( a::array ) => {
 
 			local( 'n' = #a( 1 )->ascopy )
-			#n->removetrailing( '/' )
-			.'addon_name' = #n->split( '/' )->last
+			#n->removetrailing( .pref('sys:path_delimiter') )
+			.'addon_name' = #n->split( .pref('sys:path_delimiter') )->last
 
 			if( #a->size == 0 ) => {
 				fail( -1, .lang( 'sys.controller_error', (: '@cont' = .'addon_name' )))
