@@ -3,8 +3,8 @@ may pick the license that best suits your development needs.
 
 You don't have to do anything special to choose one license over the others,
 and you don't have to notify anyone which license you are using. You are free
-to use an Arm project in commercial projects as long as any copyright header
-is left intact.
+to use the Arm framework for commercial and non-commercial purposes, as long 
+as any copyright header is left intact.
 
 The text of all three licenses are provided below.
 
@@ -36,7 +36,7 @@ THE SOFTWARE.
 BSD License
 ----
 
-Copyright (c) 2012 Douglas Burchard
+Copyright (c) 2014 Douglas Burchard
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
