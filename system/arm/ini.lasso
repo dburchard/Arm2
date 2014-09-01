@@ -17,6 +17,13 @@
 		return $arm_data->find( 'view_body' )
 	}
 
+	define sourcefile->partial( loc::string ) => {
+		local( 'current_path' = Include_CurrentPath->split( '/' ) )
+		#current_path->removelast
+		#current_path = #current_path->join( '/' )
+		return include( #current_path + '/' + arm_pref( 'sys:partial_path' ) + #loc + arm_pref( 'sys:file_suffix' ))
+	}
+
 	define arm_pref( key::string ) => {
 		local( 'o' = $arm_data->find('preferences')->find(#key) )
 		// This error message is hard coded, because utilizing

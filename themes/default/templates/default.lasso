@@ -10,7 +10,7 @@
 <body>
 	<div class="container">
 
-		<h1><?= .view_title ?></h1>
+		<?= .partial('head') ?>
 
 		<div class="main">
 			<?= .view_body ?>
