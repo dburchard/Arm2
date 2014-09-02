@@ -6,6 +6,9 @@ A bottom-up redesign of the Arm framework. This is really a completely new proje
 
 GETTING STARTED
 
+Why Use a Framework?
+
+
 MVC Basics
 Model-View-Controller is a pattern of organizing your code. It separates data storage and retrieval (Model), application logic (Controller), and the user experience (View). Let's walk through how this plays out with the Arm Framework, and the following web request.
 
@@ -22,6 +25,7 @@ Clone as Git: git clone https://github.com/dburchard/Arm2
 
 Checkout as SVN: svn export https://github.com/dburchard/Arm2
 
+
 Setup
 After installing the Arm Framework into it's intended location, about the only two things remaining to setup are the URL redirection, and a few preferences. We'll begin with the URL rewriting.
 
@@ -36,7 +40,7 @@ Most web servers have some sort of URL rewriting mechanism. In the case of Apach
 	RewriteCond %{REQUEST_FILENAME} !-d
 
 	# Take everything following the directory name, 
-	# place it into an argument named "page", and 
+	# place it into an argument named "arm_path", and 
 	# redirect the request to index.lasso.
 
 	RewriteRule ^(.*)$ index.lasso?arm_env=development&arm_path=$1 [PT,NC,L,QSA]
