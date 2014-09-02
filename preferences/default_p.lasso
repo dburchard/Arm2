@@ -1,8 +1,6 @@
 <?lassoscript
 
-/*
-*/
-arm_pref('sys:development_database'	=	array(
+arm_pref( -DEVELOPMENT,	'sys:development_database'		=	array(
 
 	-Host				=	array(
 		-Datasource		=	'MySQLDS',
@@ -13,8 +11,7 @@ arm_pref('sys:development_database'	=	array(
 	-Database			=	'MyDatabase'
 
 ))
-
-arm_pref('sys:staging_database'	=	array(
+arm_pref( -STAGING,		'sys:development_database'		=	array(
 
 	-Host				=	array(
 		-Datasource		=	'MySQLDS',
@@ -25,8 +22,7 @@ arm_pref('sys:staging_database'	=	array(
 	-Database			=	'MyDatabase'
 
 ))
-
-arm_pref('sys:production_database'	=	array(
+arm_pref( -PRODUCTION,		'sys:development_database'	=	array(
 
 	-Host				=	array(
 		-Datasource		=	'MySQLDS',
@@ -62,7 +58,8 @@ arm_pref('sys:default_addon'			=	'system/add-ons/test/')
 	===========================================================
 */
 
-arm_pref('sys:path_argument'			=	'ap')
+arm_pref('sys:path_argument'			=	'arm_path')
+arm_pref('sys:environment_argument'		=	'arm_env')
 arm_pref('sys:addon_path'				=	(: 'add-ons/','system/add-ons/' ))
 
 arm_pref('sys:theme_path'				=	'themes/')

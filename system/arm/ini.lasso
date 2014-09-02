@@ -24,17 +24,63 @@
 		return include( #current_path + arm_pref('sys:path_delimiter') + arm_pref( 'sys:partial_path' ) + #loc + arm_pref( 'sys:file_suffix' ))
 	}
 
-	define arm_pref( key::string ) => {
-		local( 'o' = $arm_data->find('preferences')->find(#key) )
+	define arm_pref( ... ) => {
+		local( environment = '' )
+		local( key = '' )
+		local( package = PAIR )
+		#rest->foreach => {
+			local( 'param' = #1 )
+			#param->isa( ::keyword ) ? #environment = #param->name->asstring
+			#param->isa( ::string ) ? #key = #param
+			#param->isa( ::pair ) ? #package = #param
+		}
+		#environment->lowercase
+		#key->size > 0 ? return arm_pref_get( #key, #environment )
+		#package->name->size > 0 ? return arm_pref_set( #package, #environment )
+	}
+
+	define arm_pref_get( key::string, environment::string ) => {
+		if( #environment->size > 0 ) => {
+			return arm_pref_getenv( #key, #environment )
+		}
+		return arm_pref_getany( #key )
+	}
+
+	define arm_pref_getenv( key::string, environment::string ) => {
+		local( 'out' = $arm_data->find('preferences')->find( #key + ' @ ' + #environment ))
+		#out->type != VOID->type ? return #out
 		// This error message is hard coded, because utilizing
 		// the default language-file could cause an error, or
 		// an infinite loop, at this point in the code.
-		fail_if( #o->type == void->type, -1, 'Preference key "' + #key + '" not found.' )
-		return #o
+		fail( -1, 'Preference key "' + #key + '", for environment "' + #environment + '", not found.' )
 	}
 
-	define arm_pref( content::pair ) => {
-		$arm_data->find('preferences')->insert( #content )
+	define arm_pref_getany( key::string ) => {
+		local( 'out' = $arm_data->find('preferences')->find( #key + ' @ ' + action_param( 'arm_env' )))
+		#out->type != VOID->type ? return #out
+		#out = $arm_data->find('preferences')->find( #key + ' @ any')
+		#out->type != VOID->type ? return #out
+		// This error message is hard coded, because utilizing
+		// the default language-file could cause an error, or
+		// an infinite loop, at this point in the code.
+		fail( -1, 'Preference key "' + #key + '" not found.' )
+	}
+
+	define arm_pref_set( package::pair, environment::string ) => {
+		if( #environment->size > 0 ) => {
+			arm_pref_setenv( #package, #environment )
+			return VOID
+		}
+		arm_pref_setany( #package )
+		return VOID
+	}
+
+	define arm_pref_setenv( package::pair, environment::string ) => {
+		$arm_data->find('preferences')->insert( #package->name + ' @ ' + #environment = #package->value )
+	}
+
+	define arm_pref_setany( package::pair ) => {
+		$arm_data->find('preferences')->insert( #package->name + ' @ any' = #package->value )
 	}
 
 	define arm_lang( key::string ) => {
@@ -113,7 +159,9 @@
 		data protected view		=	NULL
 
 		public path( segment::integer = -1) => {
-			local( 'path' = client_getparam( .pref( 'sys:path_argument') )->split( .pref('sys:path_delimiter') ))
+			local( 'gp' = client_getparam( .pref( 'sys:path_argument') ))
+			#gp->removeleading( .pref('sys:path_delimiter') )
+			local( 'path' = #gp->split( .pref('sys:path_delimiter') ))
 			if( #segment <= #path->size AND #segment > 0 ) => {
 				return( #path->get( #segment ) )
 			}
@@ -133,11 +181,7 @@
 		}
 
 		public pref( key::string, params::staticarray = staticarray ) => {
-			local( 'pref' = arm_pref( #key )->ascopy)
-			#params->foreach => {
-				#pref->replace( #1->name, #1->value )
-			}
-			return #pref
+			return arm_pref( #key )->ascopy
 		}
 
 		protected view( c::string = '' ) => {
@@ -227,7 +271,7 @@
 
 			inline(
 					web_request->params,
-					.pref( 'sys:development_database' ),
+					.pref( 'sys:development_database' ), // .pref( -Development, 'sys:database' )
 					-nothing) => {
 
 				.load_theme()

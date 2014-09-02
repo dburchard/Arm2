@@ -39,7 +39,7 @@ Most web servers have some sort of URL rewriting mechanism. In the case of Apach
 	# place it into an argument named "page", and 
 	# redirect the request to index.lasso.
 
-	RewriteRule ^(.*)$ index.lasso?ap=$1 [PT,NC,L,QSA]
+	RewriteRule ^(.*)$ index.lasso?arm_env=development&arm_path=$1 [PT,NC,L,QSA]
 
 
 In a virtual host definition, this might look more like the following.
@@ -56,7 +56,7 @@ In a virtual host definition, this might look more like the following.
 		RewriteEngine On
 		RewriteCond /Library/WebServer/Documents/example/%{REQUEST_FILENAME} !-f
 		RewriteCond /Library/WebServer/Documents/example/%{REQUEST_FILENAME} !-d
-		RewriteRule ^(.*)$ /index.lasso?/$1 [PT,L,NC,NE,QSA]
+		RewriteRule ^(.*)$ /index.lasso?arm_env=development&arm_path=$1 [PT,L,NC,NE,QSA]
 	</VirtualHost>
 
 
