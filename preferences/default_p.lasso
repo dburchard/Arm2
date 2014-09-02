@@ -60,7 +60,7 @@ arm_pref('sys:default_addon'			=	'system/add-ons/test/')
 
 arm_pref('sys:path_argument'			=	'arm_path')
 arm_pref('sys:environment_argument'		=	'arm_env')
-arm_pref('sys:addon_path'				=	(: 'add-ons/','system/add-ons/' ))
+arm_pref('sys:addon_path'				=	(: 'addons/','system/addons/' ))
 
 arm_pref('sys:theme_path'				=	'themes/')
 arm_pref('sys:model_path'				=	'models/')
