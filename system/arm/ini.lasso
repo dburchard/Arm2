@@ -35,7 +35,7 @@
 			#param->isa( ::pair ) ? #package = #param
 		}
 		#environment->lowercase
-		#key->size > 0 ? return arm_pref_get( #key, #environment )
+		#key->size > 0 ? return arm_pref_get( #key, #environment )->ascopy
 		#package->name->size > 0 ? return arm_pref_set( #package, #environment )
 	}
 
@@ -89,11 +89,19 @@
 		// the default language-file could cause an error, or
 		// an infinite loop, at this point in the code.
 		fail_if( #o->type == void->type, -1, 'Language key "' + #key + '" not found.' )
-		return #o
+		return #o->ascopy
 	}
 
 	define arm_lang( content::pair ) => {
 		$arm_data->find('language')->insert( #content )
+	}
+
+	define arm_lang( key::string, params::staticarray ) => {
+		local( 'lang' = arm_lang( #key ))
+		#params->foreach => {
+			#lang->replace( #1->name, #1->value )
+		}
+		return #lang
 	}
 
 	define Arm_Model => type {
@@ -173,15 +181,11 @@
 		}
 
 		public lang( key::string, params::staticarray = staticarray ) => {
-			local( 'lang' = arm_lang( #key )->ascopy)
-			#params->foreach => {
-				#lang->replace( #1->name, #1->value )
-			}
-			return #lang
+			return arm_lang( #key, #params )
 		}
 
-		public pref( key::string, params::staticarray = staticarray ) => {
-			return arm_pref( #key )->ascopy
+		public pref( key::string ) => {
+			return arm_pref( #key )
 		}
 
 		protected view( c::string = '' ) => {
@@ -222,7 +226,7 @@
 		}
 
 		protected run_controller( c::string ) => {
-			escape_tag( #c )->invoke->run_method( (.path( 2 ) === NULL ? '' | .path( 2 )))
+			escape_tag( #c )->invoke->run_method( .path( 2 )->asstring )
 		}
 
 		protected run_method( p::string ) => {
@@ -271,7 +275,7 @@
 
 			inline(
 					web_request->params,
-					.pref( 'sys:development_database' ), // .pref( -Development, 'sys:database' )
+					.pref( 'sys:database' ), // .pref( -Development, 'sys:database' )
 					-nothing) => {
 
 				.load_theme()
@@ -354,14 +358,14 @@
 
 		private load_addon( a::array ) => {
 
-			local( 'n' = #a( 1 )->ascopy )
-			#n->removetrailing( .pref('sys:path_delimiter') )
-			.'addon_name' = #n->split( .pref('sys:path_delimiter') )->last
-
 			if( #a->size == 0 ) => {
 				fail( -1, .lang( 'sys.controller_error', (: '@cont' = .'addon_name' )))
 				return
 			}
+
+			local( 'n' = #a( 1 )->ascopy )
+			#n->removetrailing( .pref('sys:path_delimiter') )
+			.'addon_name' = #n->split( .pref('sys:path_delimiter') )->last
 
 			local('file_found' = TRUE)
 			protect => {

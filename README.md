@@ -1,7 +1,7 @@
-Arm2
+Arm 2.0
 ====
 
-A bottom-up redesign of the Arm framework. This is really a completely new project, and has very little connection to the original Arm1 design.
+A bottom-up redesign of the Arm framework. This is really a completely new project, and has very little connection to the original Arm 1.0 design.
 
 
 SYSTEM REQUIREMENTS

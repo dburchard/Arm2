@@ -4,8 +4,10 @@
 		parent Arm_PublicController
 
 		public oncreate() => {
+
 			.load_library( 'mytag' )
 			.load_model( 'pilot_m' )
+
 		}
 
 		public index() => {

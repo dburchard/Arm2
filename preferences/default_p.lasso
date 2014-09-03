@@ -1,6 +1,6 @@
 <?lassoscript
 
-arm_pref( -DEVELOPMENT,	'sys:development_database'		=	array(
+arm_pref( -DEVELOPMENT,	'sys:database'		=	array(
 
 	-Host				=	array(
 		-Datasource		=	'MySQLDS',
@@ -11,7 +11,7 @@ arm_pref( -DEVELOPMENT,	'sys:development_database'		=	array(
 	-Database			=	'MyDatabase'
 
 ))
-arm_pref( -STAGING,		'sys:development_database'		=	array(
+arm_pref( -STAGING,		'sys:database'		=	array(
 
 	-Host				=	array(
 		-Datasource		=	'MySQLDS',
@@ -22,7 +22,7 @@ arm_pref( -STAGING,		'sys:development_database'		=	array(
 	-Database			=	'MyDatabase'
 
 ))
-arm_pref( -PRODUCTION,		'sys:development_database'	=	array(
+arm_pref( -PRODUCTION,		'sys:database'	=	array(
 
 	-Host				=	array(
 		-Datasource		=	'MySQLDS',
@@ -50,7 +50,7 @@ arm_pref('sys:default_theme'			=	'default')
 	This preference sets the addon to call, when no controller
 	is specified in the client's web request.
 */
-arm_pref('sys:default_addon'			=	'system/add-ons/test/')
+arm_pref('sys:default_addon'			=	'system/addons/test/')
 
 /*
 	Chances are, you will have no need to modify any of the 
