@@ -9,7 +9,7 @@ A web-server that supports Lasso 9+, and a url rewriting mechanism
 
 
 DOCUMENTATION
-Read about how to instal and use teh Arm Framework by visiting the wiki at https://github.com/dburchard/Arm2/wiki
+Read about how to install and use the Arm Framework by visiting the wiki at https://github.com/dburchard/Arm2/wiki
 
 
 CONTACT US:
