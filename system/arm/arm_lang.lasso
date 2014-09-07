@@ -21,4 +21,26 @@
 		return #lang
 	}
 
+	define arm_lang_loadfile( filepath::string ) => {
+		arm_lang_accepted()->foreach => {
+			local( 'p' = #filepath + #1 + arm_pref( 'sys:file_suffix' ))
+			protect => {
+				library_once( #p )
+			}
+		}
+	}
+
+	define arm_lang_accepted()::array => {
+		local( 'x' = FALSE)
+		local( 's' = '')
+		web_request->httpAcceptLanguage->split('')->foreach => {
+			( string_isalpha( #1 ) OR #1 == '-' OR #1 == ',' ) AND NOT #x ? #s->append( #1 ) | #x = TRUE
+		}
+		#s->lowercase
+		#s = #s->split(',')
+		NOT #s->contains( arm_pref( 'sys:default_language' )) ? #s->insert( arm_pref( 'sys:default_language' ) )
+		#s->reverse
+		return #s
+	}
+
 ?>

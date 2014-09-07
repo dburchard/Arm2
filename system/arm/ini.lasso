@@ -4,9 +4,10 @@
 	$arm_data->insert('preferences' = map)
 	$arm_data->insert('language' = map)
 	$arm_data->insert('view_areas' = map)
-	// $arm_data->insert('addon_root' = string)
+	$arm_data->insert('path' = array)
 
 	library_once( include_path + 'sourcefile.lasso' )
+	library_once( include_path + 'arm_path.lasso' )
 	library_once( include_path + 'arm_pref.lasso' )
 	library_once( include_path + 'arm_lang.lasso' )
 	library_once( include_path + 'arm_addon.lasso' )

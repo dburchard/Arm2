@@ -6,16 +6,6 @@
 		data protected root_directory	=	NULL
 		data protected buffer			=	STRING
 
-		public path( segment::integer = -1) => {
-			local( 'gp' = client_getparam( .pref( 'sys:path_argument') ))
-			#gp->removeleading( .pref('sys:path_delimiter') )
-			local( 'path' = #gp->split( .pref('sys:path_delimiter') ))
-			if( #segment <= #path->size AND #segment > 0 ) => {
-				return( #path->get( #segment ) )
-			}
-			return NULL
-		}
-
 		public asstring() => {
 			return .buffer()
 		}
@@ -100,41 +90,6 @@
 				.pref( 'sys:file_suffix' )
 			)
 		}
-
-		/*
-		protected load_controller( c::string ) => {
-			library_once(
-				.pref( 'sys:controller_path' ) +
-				#c +
-				.pref( 'sys:file_suffix' )
-			)
-		}
-
-		protected run_controller( c::string ) => {
-			escape_tag( #c )->invoke->run_method( .path( 2 )->asstring )
-		}
-
-		public run_method( p::string ) => {
-
-			if( #p == '' && .hasmethod( ::index )) => {
-				.index
-				return
-			}
-
-			protect => {
-				.escape_member( tag( #p))->invoke
-				return
-			}
-
-			if( .hasmethod( ::_not_found )) => {
-				._not_found
-				return
-			}
-
-			fail( -1, .lang( 'sys.method_error', (: '@mname' = #p ) ))
-
-		}
-		*/
 
 	}
 

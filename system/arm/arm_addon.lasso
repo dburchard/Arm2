@@ -20,38 +20,6 @@
 
 		}
 
-		public path( segment::integer = -1) => {
-			local( 'gp' = client_getparam( arm_pref( 'sys:path_argument') ))
-			#gp->removeleading( arm_pref('sys:path_delimiter') )
-			local( 'path' = #gp->split( arm_pref('sys:path_delimiter') ))
-			if( #segment <= #path->size AND #segment > 0 ) => {
-				return( #path->get( #segment ) )
-			}
-			return NULL
-		}
-
-		private accepted_language() => {
-			local( 'x' = FALSE)
-			local( 's' = '')
-			web_request->httpAcceptLanguage->split('')->foreach => {
-				(string_isalpha( #1 ) OR #1 == '-' OR #1 == ',') AND NOT #x ? #s->append( #1 ) | #x = TRUE
-			}
-			#s->lowercase
-			#s = #s->split(',')
-			NOT #s->contains( arm_pref( 'sys:default_language' ) ) ? #s->insert( arm_pref( 'sys:default_language' ) )
-			#s->reverse
-			return #s
-		}
-
-		private load_language_file( filepath::string ) => {
-			.accepted_language()->foreach => {
-				local( 'p' = #filepath + #1 + arm_pref( 'sys:file_suffix' ))
-				protect => {
-					library_once( #p )
-				}
-			}
-		}
-
 		private load_addon( a::array ) => {
 
 			if( #a->size == 0 ) => {
@@ -96,7 +64,7 @@
 		}
 
 		private load_addon_language( root_directory::string ) => {
-			.load_language_file( 
+			arm_lang_loadfile( 
 				#root_directory +
 				arm_pref( 'sys:language_path' ) +
 				.'addon_name' +
@@ -107,7 +75,7 @@
 		protected run_controller( name::string, root_directory::string ) => {
 			.'addon' = escape_tag( #name )->invoke
 			.'addon'->root_directory( #root_directory )
-			.run_method( .path( 2 )->asstring )
+			.run_method( arm_path( 2 )->asstring )
 		}
 
 		public run_method( p::string ) => {
