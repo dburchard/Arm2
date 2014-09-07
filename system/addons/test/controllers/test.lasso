@@ -10,18 +10,24 @@
 			->build( 'test_v' )
 		}
 
-		public not_found() => {
+		public foo() => {
+			self->view
+			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Index' )))
+			->title( 'Foo' )
+			->build( 'test_v' )
+		}
+
+		public _not_found() => {
 			self->view
 			->set( 'out', .lang( 'test.404_welcome' ))
 			->title( 'Error 404' )
 			->build( 'test_v' )
 		}
 
-		public foo() => {
-			self->view
-			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Index' )))
-			->title( 'Foo' )
-			->build( 'test_v' )
+		public _plugin() => {
+			self->plugin_view
+			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Plugin' )))
+			->build( 'testplugin_v' )
 		}
 
 	}

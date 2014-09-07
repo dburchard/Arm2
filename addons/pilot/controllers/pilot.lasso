@@ -12,8 +12,16 @@
 
 		public index() => {
 			self->view
-			->set( 'out', .lang( 'pilot.method_welcome', (: '@mname' = 'Index' )) + ' ' + mytag)
-			->title( 'Index Page' )
+			->set( 'out', .lang( 'pilot.method_welcome', (: '@mname' = 'Index' )) + ' ' + MYTAG)
+			->area( 'myarea', arm_plugin('test') )
+			->title( 'Pilot Page' )
+			->build( 'pilot_v' )
+		}
+
+		public foo() => {
+			self->view
+			->set( 'out', .lang( 'pilot.method_welcome', (: '@mname' = 'Foo' )))
+			->title( 'Foo' )
 			->build( 'pilot_v' )
 		}
 
@@ -24,11 +32,7 @@
 			->build( 'pilot_v' )
 		}
 
-		public foo() => {
-			self->view
-			->set( 'out', .lang( 'pilot.method_welcome', (: '@mname' = 'Foo' )))
-			->title( 'Foo' )
-			->build( 'pilot_v' )
+		public _plugin() => {
 		}
 
 	}

@@ -12,6 +12,8 @@
 
 		<?= .partial('head') ?>
 
+		<?= .view_area('myarea') ?>
+
 		<div class="main">
 			<?= .view_body ?>
 		</div>
