@@ -50,7 +50,7 @@ arm_pref('sys:default_theme'			=	'default')
 	This preference sets the addon to call, when no controller
 	is specified in the client's web request.
 */
-arm_pref('sys:default_addon'			=	'system/addons/test/')
+arm_pref('sys:default_addon'			=	'test')
 
 /*
 	Chances are, you will have no need to modify any of the 

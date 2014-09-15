@@ -26,7 +26,13 @@
 
 		public _plugin() => {
 			self->plugin_view
-			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Plugin' )))
+			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Plugin with no parameters' )))
+			->build( 'testplugin_v' )
+		}
+
+		public _plugin( myparam::string ) => {
+			self->plugin_view
+			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Plugin with the parameter: "' + #myparam + '"' )))
 			->build( 'testplugin_v' )
 		}
 

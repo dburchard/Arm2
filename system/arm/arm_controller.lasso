@@ -3,8 +3,8 @@
 	define Arm_PublicController => type {
 
 		data protected view				=	NULL
-		data protected root_directory	=	NULL
 		data protected buffer			=	STRING
+		data protected root_directory	=	NULL
 
 		public asstring() => {
 			return .buffer()
@@ -18,12 +18,16 @@
 			return .'buffer'
 		}
 
-		public root_directory( path::string ) => {
-			.'root_directory' = #path
+		public root_directory( package::string ) => {
+			.'root_directory' = #package
 		}
 
 		public root_directory() => {
-			return .'root_directory'
+			if( .'root_directory'->type == NULL->type ) => {
+				return $arm_data->find( 'addon_root_directory' )
+			else
+				return .'root_directory'
+			}
 		}
 
 		public lang( key::string, params::staticarray = staticarray ) => {
@@ -50,26 +54,9 @@
 			return .'view'
 		}
 
-		protected cleanup_callsitefile( csf::string ) => {
-
-			local( 'controller_path' = arm_pref( 'sys:controller_path' ))
-			#controller_path->removetrailing('/')
-
-			local( 'path' = #csf->ascopy )
-			#path = #path->split( '//' )->last
-			#path = #path->split( '/' )
-			#path->removelast
-			#path = #path->join( '/' )
-			#path->removetrailing( #controller_path )
-			return #path
-		}
-
 		protected load_library( c::string ) => {
-
-			local( 'addon_root' = .cleanup_callsitefile( currentCapture->continuation->callsite_file ))
-
 			protect => {
-				(: .pref( 'sys:library_path' ), #addon_root + .pref( 'sys:library_path' ) )->foreach => {
+				(: .pref( 'sys:library_path' ), .root_directory + .pref( 'sys:library_path' ) )->foreach => {
 					library_once(
 						#1 +
 						#c +
@@ -80,11 +67,8 @@
 		}
 
 		protected load_model( c::string ) => {
-			
-			local( 'addon_root' = .cleanup_callsitefile( currentCapture->continuation->callsite_file ))
-
 			library_once(
-				#addon_root +
+				.root_directory +
 				.pref( 'sys:model_path' ) +
 				#c +
 				.pref( 'sys:file_suffix' )

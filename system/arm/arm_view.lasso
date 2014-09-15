@@ -46,35 +46,32 @@
 				var(#1->name = #1->value)
 			}
 
-			protect => {
-				handle => {
+			// protect => {
 
-					if( #plugin ) => {
-						.'controller'->buffer( $arm_data->find( 'view_body' ))
-					else
-						.'controller'->buffer( include(
-			
-							.'controller'->pref('sys:theme_path') + 
-							$arm_data->find('theme_name') + 
-							.'controller'->pref('sys:path_delimiter') + 
-							.'controller'->pref('sys:template_path') + 
-							$arm_data->find('theme_name') + 
-							.'controller'->pref( 'sys:file_suffix')
-			
-						))
-					}
+			$arm_data->insert( 'view_body' = include(
 
-				}
+				.'controller'->root_directory + 
+				.'controller'->pref('sys:view_path') + 
+				.'file_name' + 
+				.'controller'->pref( 'sys:file_suffix')
+			))
 
-				$arm_data->insert( 'view_body' = include(
-
-					.'controller'->root_directory + 
-					.'controller'->pref('sys:view_path') + 
-					.'file_name' + 
+			if( #plugin ) => {
+				.'controller'->buffer( $arm_data->find( 'view_body' ))
+			else
+				.'controller'->buffer( include(
+	
+					.'controller'->pref('sys:theme_path') + 
+					$arm_data->find('theme_name') + 
+					.'controller'->pref('sys:path_delimiter') + 
+					.'controller'->pref('sys:template_path') + 
+					$arm_data->find('theme_name') + 
 					.'controller'->pref( 'sys:file_suffix')
+	
 				))
-
 			}
+
+			// }
 		}
 	}
 

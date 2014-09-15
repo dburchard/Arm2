@@ -20,7 +20,7 @@
 				.load_theme_preferences()
 				.load_theme_language()
 
-				return arm_addon( arm_path( 1 )->asstring, (: ))
+				return arm_addon( arm_path( 1 )->asstring )
 			}
 
 		}
