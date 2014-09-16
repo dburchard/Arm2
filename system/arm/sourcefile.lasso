@@ -81,14 +81,25 @@
 		return '<img src="' + .theme_baseurl + arm_pref( 'sys:image_path' ) + #file + '" alt="' + #alt + '" />'
 	}
 
+	define sourcefile->theme_favicon( file::string, -rel::string, -sizes::string = '', -type::string = '' ) => {
+		local( 'out' = '' )
+		#out->append( '<link' )
+		#out->append( ' rel="' + #rel + '"' )
+		#out->append( ' href="' + .theme_baseurl + arm_pref( 'sys:image_path' ) + #file + '"' )
+		#sizes ? #out->append( ' sizes="' + #sizes + '"' )
+		#type ? #out->append( ' type="' + #type + '"' )
+		#out->append( ' />' )
+		return #out
+	}
+
 	define sourcefile->theme_css( file::string, -group::string = '_any' ) => {
 		$arm_data->find( 'view_css' )->find( #group )->type != array->type ? $arm_data->find( 'view_css' )->insert( #group = array )
-		$arm_data->find( 'view_css' )->find( #group )->insert( .theme_baseurl + arm_pref( 'sys:css_path' ) + #file )
+		$arm_data->find( 'view_css' )->find( #group )->insert( .theme_baseurl + arm_pref( 'sys:css_path' ) + #file, 1 )
 	}
 
 	define sourcefile->theme_js( file::string, -group::string = '_any' ) => {
 		$arm_data->find( 'view_js' )->find( #group )->type != array->type ? $arm_data->find( 'view_js' )->insert( #group = array )
-		$arm_data->find( 'view_js' )->find( #group )->insert( .theme_baseurl + arm_pref( 'sys:js_path' ) + #file )
+		$arm_data->find( 'view_js' )->find( #group )->insert( .theme_baseurl + arm_pref( 'sys:js_path' ) + #file, 1 )
 	}
 
 ?>

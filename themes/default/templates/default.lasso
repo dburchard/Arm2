@@ -4,18 +4,7 @@
 	<meta charset="utf-8">
 	<title><?= .view_title ?></title>
 
-	<?=
-		/*
-
-		.navigation( 'footer' )
-
-		.theme_favicon( 'favicon.ico', -rel='icon', -sizes='16x16 32x32', -type='image/png' )
-		.theme_title
-		.theme_subtitle
-
-
-		*/
-	?>
+	<?= .theme_favicon( 'favicon.ico', -rel='icon', -sizes='16x16 32x32', -type='image/png' ) ?>
 
 	<?= .theme_css( 'theme_style.css' ) ?>
 
