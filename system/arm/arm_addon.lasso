@@ -97,7 +97,7 @@
 				return TRUE
 			}
 		
-			if( #addon->hasmethod( tag( #method_name ))) => {
+			if( #addon->hasmethod( tag( #method_name )) || #addon->hasmethod( ::_unknowntag )) => {
 				#addon->escape_member( tag( #method_name))->invoke
 				return TRUE
 			}
