@@ -86,6 +86,8 @@
 			}
 			NOT #success ? fail( -1, arm_lang( 'sys.controller_error', (: '@cname' = #addon_name )))
 
+			#addon->load_build( #addon_name )
+
 			return #addon
 
 		}

@@ -5,6 +5,7 @@
 		data protected view				=	NULL
 		data protected buffer			=	STRING
 		data protected root_directory	=	NULL
+		data protected build			=	NULL
 
 		public asstring() => {
 			return .buffer()
@@ -28,6 +29,11 @@
 			else
 				return .'root_directory'
 			}
+		}
+
+		public load_build( addon_name::string ) => {
+			library_once( .root_directory + arm_pref( 'sys:build_filename' ) + .pref( 'sys:file_suffix' ) )
+			.'build' = escape_tag( #addon_name + '_' +  arm_pref( 'sys:build_filename' ))->invoke
 		}
 
 		public lang( key::string, params::staticarray = staticarray ) => {

@@ -16,6 +16,7 @@
 	library_once( include_path + 'arm_addon.lasso' )
 	library_once( include_path + 'arm_model.lasso' )
 	library_once( include_path + 'arm_view.lasso' )
+	library_once( include_path + 'arm_build.lasso' )
 	library_once( include_path + 'arm_controller.lasso' )
 	library_once( include_path + 'arm.lasso' )
 
