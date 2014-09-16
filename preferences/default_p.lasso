@@ -35,9 +35,9 @@ arm_pref( -PRODUCTION,		'sys:database'	=	array(
 ))
 
 /*
-	This preference established the language file(s) to load, 
+	This preference establishes the language file(s) to load, 
 	along with any languages identified by the client's 
-	accept-language field.
+	HTTP accept-language field.
 */
 arm_pref('sys:default_language'			=	'en')
 
@@ -71,6 +71,9 @@ arm_pref('sys:partial_path'				=	'partials/')
 arm_pref('sys:library_path'				=	'libraries/')
 arm_pref('sys:preference_path'			=	'preferences/')
 arm_pref('sys:language_path'			=	'language/')
+arm_pref('sys:css_path'					=	'css/')
+arm_pref('sys:js_path'					=	'js/')
+arm_pref('sys:image_path'				=	'images/')
 arm_pref('sys:path_delimiter'			=	'/')
 
 arm_pref('sys:preference_suffix'		=	'_p')

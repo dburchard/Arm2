@@ -12,6 +12,9 @@
 
 		public index() => {
 			self->view
+			->metadata( -name='author', -content='http://www.douglasburchard.com' )
+			->css( 'style.js' )
+			->js( 'jquery.js', -group = 'footer' )
 			->set( 'out', .lang( 'pilot.method_welcome', (: '@mname' = 'Index' )) + ' ' + MYTAG)
 			->area( 'myarea', arm_plugin('test', (: 'myarg')) )
 			->area( 'navigation', arm_plugin('test') )
