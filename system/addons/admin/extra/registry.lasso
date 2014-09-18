@@ -1,6 +1,6 @@
 <?lassoscript
 
-	define Arm_Registry -> type {
+	define Arm_Registry => type {
 
 		data public addon_registry = map(
 
@@ -11,7 +11,7 @@
 
 		)
 
-		public load => {
+		public load() => {
 		}
 
 	}
