@@ -13,6 +13,12 @@
 		parent Arm_Build
 
 		/* 
+		 * version is a required data member inside this type.
+		 * contains an decimal that defines a unique version for this addon.
+		 */
+		data public version::decimal = 1.0
+
+		/* 
 		 * info() is a required method inside this type.
 		 * returns an array with basic information about your module.
 		 */

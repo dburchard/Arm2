@@ -3,6 +3,8 @@
 	define Pilot => type {
 		parent Arm_PublicController
 
+		data public _registry_required		=		FALSE
+
 		public oncreate() => {
 
 			.load_library( 'mytag' )
@@ -15,7 +17,7 @@
 			->metadata( -name='author', -content='http://www.douglasburchard.com' )
 			->css( 'style.js' )
 			->js( 'jquery.js', -group = 'footer' )
-			->set( 'out', .lang( 'pilot.method_welcome', (: '@mname' = 'Index' )) + ' ' + MYTAG)
+			->set( 'out', arm_lang( 'pilot.method_welcome', (: '@mname' = 'Index' )) + ' ' + MYTAG)
 			->area( 'myarea', arm_plugin('test', (: 'myarg')) )
 			->area( 'navigation', arm_plugin('test') )
 			->title( 'Pilot Page' )
@@ -24,14 +26,14 @@
 
 		public foo() => {
 			self->view
-			->set( 'out', .lang( 'pilot.method_welcome', (: '@mname' = 'Foo' )))
+			->set( 'out', arm_lang( 'pilot.method_welcome', (: '@mname' = 'Foo' )))
 			->title( 'Fooh' )
 			->build( 'pilot_v' )
 		}
 
 		public _not_found() => {
 			self->view
-			->set( 'out', .lang( 'pilot.404_welcome' ))
+			->set( 'out', arm_lang( 'pilot.404_welcome' ))
 			->title( 'Pilot Error 404' )
 			->build( 'pilot_v' )
 		}

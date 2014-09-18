@@ -3,6 +3,8 @@
 	define Test => type {
 		parent Arm_PublicController
 
+		data public _registry_required		=		FALSE
+
 		public index() => {
 			self->view
 			->set( 'out', .lang( 'test.method_welcome', (: '@mname' = 'Index' )))

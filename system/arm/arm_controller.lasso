@@ -6,9 +6,18 @@
 		data protected buffer			=	STRING
 		data protected root_directory	=	NULL
 		data protected build			=	NULL
+		data public _registry_required	=	TRUE
 
 		public asstring() => {
 			return .buffer()
+		}
+
+		public lang( key::string, params::staticarray = staticarray ) => {
+			return arm_lang( #key, #params )
+		}
+
+		public pref( key::string ) => {
+			return arm_pref( #key )
 		}
 
 		public buffer( b::string ) => {
@@ -17,6 +26,11 @@
 
 		public buffer() => {
 			return .'buffer'
+		}
+
+		public load_build( addon_name::string ) => {
+			library_once( .root_directory + arm_pref( 'sys:build_filename' ) + .pref( 'sys:file_suffix' ) )
+			.'build' = escape_tag( #addon_name + '_' +  arm_pref( 'sys:build_filename' ))->invoke
 		}
 
 		public root_directory( package::string ) => {
@@ -29,19 +43,6 @@
 			else
 				return .'root_directory'
 			}
-		}
-
-		public load_build( addon_name::string ) => {
-			library_once( .root_directory + arm_pref( 'sys:build_filename' ) + .pref( 'sys:file_suffix' ) )
-			.'build' = escape_tag( #addon_name + '_' +  arm_pref( 'sys:build_filename' ))->invoke
-		}
-
-		public lang( key::string, params::staticarray = staticarray ) => {
-			return arm_lang( #key, #params )
-		}
-
-		public pref( key::string ) => {
-			return arm_pref( #key )
 		}
 
 		protected view( c::string = '' ) => {

@@ -56,7 +56,7 @@
 			arm_pref( 'sys:addon_path' )->foreach => {
 				local( 'search_path' = #1 )
 				protect => {
-				library(
+					library(
 						#search_path +
 						#addon_name + arm_pref('sys:path_delimiter') +
 						arm_pref( 'sys:controller_path' ) +
@@ -70,6 +70,7 @@
 					.load_addon_language( #addon_name, #addon_root )
 				}
 			}
+
 			NOT #success ? fail( -1, arm_lang( 'sys.file_error', (: '@fname' = #addon_name + arm_pref( 'sys:file_suffix' ))))
 
 			local( 'success' = FALSE )
@@ -82,8 +83,9 @@
 				#addon->root_directory( #addon_root )
 
 				$arm_data->insert( 'addon_root_directory' = #outside_root )
-				#success = TRUE
+				NOT #addon->_registry_required ? #success = TRUE
 			}
+
 			NOT #success ? fail( -1, arm_lang( 'sys.controller_error', (: '@cname' = #addon_name )))
 
 			#addon->load_build( #addon_name )
@@ -99,8 +101,8 @@
 				return TRUE
 			}
 		
-			if( #addon->hasmethod( tag( #method_name )) || #addon->hasmethod( ::_unknowntag )) => {
-				#addon->escape_member( tag( #method_name))->invoke
+			if( #addon->hasmethod( tag( #method_name ))) => {
+				#addon->escape_member( tag( #method_name ))->invoke
 				return TRUE
 			}
 

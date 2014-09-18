@@ -53,10 +53,13 @@ arm_pref('sys:default_theme'			=	'default')
 arm_pref('sys:default_addon'			=	'test')
 
 /*
-	Chances are, you will have no need to modify any of the 
+	Most likely, you will have no need to modify any of the 
 	preferences below this comment.
 	===========================================================
 */
+
+arm_pref('sys:registry_filepath'		=	'system/addons/admin/extra/registry.lasso')
+arm_pref('sys:registry_typename'		=	'arm_registry')
 
 arm_pref('sys:path_argument'			=	'arm_path')
 arm_pref('sys:environment_argument'		=	'arm_env')

@@ -12,14 +12,22 @@
 	define Pilot_Build => type {
 		parent Arm_Build
 
-		/* 
+		/**!
+		 * version is a required method inside this type.
+		 * returns a decimal that defines a unique version for this addon.
+		 */
+		public version()::decimal => {
+			return 1.0
+		}
+
+		/**!
 		 * info() is a required method inside this type.
 		 * returns an array with basic information about your module.
 		 */
 		protected info() => {
 		}
 
-		/* 
+		/**!
 		 * install() is a required method inside this type
 		 * runs the queries for your database setup.
 		 */
@@ -27,7 +35,7 @@
 			return TRUE;
 		}
 
-		/* 
+		/**!
 		 * uninstall() is a required method inside this type.
 		 * cleans up your database, and returns true if successful.
 		 */
@@ -35,7 +43,7 @@
 			return TRUE;
 		}
 
-		/* 
+		/**!
 		 * help() is a required method inside this type.
 		 * returns an html markup string with help for your addon.
 		 */
@@ -45,7 +53,7 @@
 			return 'No documentation has been added for this module.<br />Contact the <a href="mailto:developer@example.com">addon developer</a> for assistance.';
 		}
 
-		/* 
+		/**!
 		 * upgrade() is an optional method inside this type.
 		 * conditionally makes changes to your database, and
 		 * returns true if successful.
