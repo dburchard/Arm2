@@ -13,14 +13,11 @@
 			local( 'addon' = VOID )
 
 			if( #addon_name ) => {
-				local( 'success' = FALSE )
-				protect => {
-					#addon = .load_addon( #addon_name )
-					#success = TRUE
-				}
+				#addon = .load_addon( #addon_name )
 
-				if( NOT #success ) => {
+				if( NOT #addon ) => {
 					#addon = .load_addon( arm_pref( 'sys:default_addon' ))
+					NOT #addon ? fail( -1, arm_lang( 'sys.controller_error', (: '@cname' = #addon_name )))
 					if( .run_method( #addon, #addon_name )) => {
 						return #addon
 					}
@@ -33,6 +30,7 @@
 				}
 
 				#addon = .load_addon( arm_pref( 'sys:default_addon' ))
+				NOT #addon ? fail( -1, arm_lang( 'sys.controller_error', (: '@cname' = #addon_name )))
 				if( . run_method( #addon, '_not_found' )) => {
 					return #addon
 				}
@@ -41,6 +39,7 @@
 
 			else
 				#addon = .load_addon( arm_pref( 'sys:default_addon' ))
+				NOT #addon ? fail( -1, arm_lang( 'sys.controller_error', (: '@cname' = #addon_name )))
 				.run_method( #addon, '' )
 				return #addon
 
@@ -70,8 +69,7 @@
 					.load_addon_language( #addon_name, #addon_root )
 				}
 			}
-
-			NOT #success ? fail( -1, arm_lang( 'sys.file_error', (: '@fname' = #addon_name + arm_pref( 'sys:file_suffix' ))))
+			NOT #success ? return FALSE
 
 			local( 'success' = FALSE )
 			protect => {
@@ -85,8 +83,7 @@
 				$arm_data->insert( 'addon_root_directory' = #outside_root )
 				NOT #addon->_registry_required ? #success = TRUE
 			}
-
-			NOT #success ? fail( -1, arm_lang( 'sys.controller_error', (: '@cname' = #addon_name )))
+			NOT #success ? return FALSE
 
 			#addon->load_build( #addon_name )
 

@@ -29,8 +29,16 @@
 		}
 
 		public load_build( addon_name::string ) => {
-			library_once( .root_directory + arm_pref( 'sys:build_filename' ) + .pref( 'sys:file_suffix' ) )
-			.'build' = escape_tag( #addon_name + '_' +  arm_pref( 'sys:build_filename' ))->invoke
+			local( 'filepath' = .root_directory + arm_pref( 'sys:build_filename' ) + .pref( 'sys:file_suffix' ) )
+			local( 'success' = FALSE )
+			protect => {
+				include_raw( #filepath )
+				#success = TRUE
+			}
+			if( #success ) => {
+				library_once( #filepath )
+				.'build' = escape_tag( #addon_name + '_' +  arm_pref( 'sys:build_filename' ))->invoke
+			}
 		}
 
 		public root_directory( package::string ) => {
