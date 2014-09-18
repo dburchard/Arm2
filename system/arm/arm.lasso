@@ -75,10 +75,10 @@
 		}
 		
 		/**!
-		 * loads the theme preference file.
+		 * if present, loads the theme preference file.
 		 */
 		private load_theme_preferences() => {
-			library_once(
+			local( 'filepath' =
 				arm_pref( 'sys:theme_path' ) +
 				$arm_data->find( 'theme_name')  +
 				arm_pref('sys:path_delimiter') +
@@ -87,10 +87,16 @@
 				arm_pref( 'sys:preference_suffix' ) +
 				arm_pref( 'sys:file_suffix' )
 			)
+			local( 'success' = FALSE )
+			protect => {
+				include_raw( #filepath )
+				#success = TRUE
+			}
+			#success ? library_once( #filepath )
 		}
 
 		/**!
-		 * loads the theme language file(s).
+		 * if present, loads the theme language file(s).
 		 */
 		private load_theme_language() => {
 			arm_lang_loadfile(
