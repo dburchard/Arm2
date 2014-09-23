@@ -3,8 +3,6 @@
 	define Pilot => type {
 		parent Arm_PublicController
 
-		data public _registry_required		=		FALSE
-
 		public oncreate() => {
 
 			.load_library( 'mytag' )
@@ -42,6 +40,5 @@
 		}
 
 	}
-
 
 ?>

@@ -25,6 +25,12 @@
 		 * returns an array with basic information about your module.
 		 */
 		protected info() => {
+			/*
+			self->registry
+				->menu( 'top' )
+				->name( 'en' = 'My Addon' )
+				->description( 'en' = 'The quick brown fox.' )
+			*/
 		}
 
 		/**!

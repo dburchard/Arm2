@@ -46,6 +46,17 @@
 			}
 		}
 
+		private controller_path( search_path::string, addon_name::string ) => {
+			local( 'out' = '' )
+			#out->append( #search_path )
+			#out->append( #addon_name )
+			#out->append( arm_pref('sys:path_delimiter' ))
+			#out->append( arm_pref( 'sys:controller_path' ))
+			#out->append( #addon_name )
+			#out->append( arm_pref( 'sys:file_suffix' ))
+			return #out
+		}
+
 		private load_addon( addon_name::string ) => {
 
 			local( 'addon_root' = '' )
@@ -56,10 +67,7 @@
 				local( 'search_path' = #1 )
 				protect => {
 					library(
-						#search_path +
-						#addon_name + arm_pref('sys:path_delimiter') +
-						arm_pref( 'sys:controller_path' ) +
-						#addon_name + arm_pref( 'sys:file_suffix' )
+						.controller_path( #search_path, #addon_name )
 					)
 					#addon_root = #search_path + #addon_name + arm_pref('sys:path_delimiter')
 					#success = TRUE
@@ -81,13 +89,15 @@
 				#addon->root_directory( #addon_root )
 
 				$arm_data->insert( 'addon_root_directory' = #outside_root )
-				NOT #addon->_registry_required ? #success = TRUE
+				#success = TRUE
 			}
 			NOT #success ? return FALSE
 
-			#addon->load_build( #addon_name )
+			NOT #addon->_registry_required ? return #addon
 
-			return #addon
+			$arm_data->find( 'registry' )->is_registered( #addon ) ? return #addon
+
+			return FALSE
 
 		}
 		
@@ -131,6 +141,21 @@
 			)
 		}
 
+	}
+
+	define Arm_Admin => type {
+		parent Arm_Addon
+
+		private controller_path( search_path::string, addon_name::string ) => {
+			local( 'out' = '' )
+			#out->append( #search_path )
+			#out->append( #addon_name )
+			#out->append( arm_pref('sys:path_delimiter' ))
+			#out->append( arm_pref( 'sys:controller_path' ))
+			#out->append( arm_pref( 'sys:admin_filename' ))
+			#out->append( arm_pref( 'sys:file_suffix' ))
+			return #out
+		}
 	}
 
 	define Arm_Plugin => type {

@@ -80,6 +80,7 @@ arm_pref('sys:image_path'				=	'images/')
 arm_pref('sys:path_delimiter'			=	'/')
 
 arm_pref('sys:preference_suffix'		=	'_p')
+arm_pref('sys:admin_filename'			=	'admin')
 arm_pref('sys:build_filename'			=	'build')
 arm_pref('sys:file_suffix'				=	'.lasso')
 

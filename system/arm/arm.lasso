@@ -5,6 +5,10 @@
 
 		data addon_name				=	NULL
 
+		/**!
+		 * loads preferenses and language, processes request,
+		 * returns arm_addon
+		 */
 		public oncreate() => {
 
 			.load_default_preferences()
@@ -60,8 +64,8 @@
 				library_once( arm_pref( 'sys:registry_filepath' ))
 				#file_loaded = TRUE
 			}
-			#file_loaded ? #registry = escape_tag( arm_pref( 'sys:registry_typename' ))->invoke
-			#registry->hasmethod( ::load ) ? #registry->load
+			#file_loaded ? $arm_data->find( 'registry' ) = escape_tag( arm_pref( 'sys:registry_typename' ))->invoke
+			$arm_data->find( 'registry' )->hasmethod( ::load ) ? $arm_data->find( 'registry' )->load
 		}
 
 		/**!
