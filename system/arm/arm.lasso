@@ -3,6 +3,10 @@
 	define Arm => type {
 		parent Arm_PublicController
 
+		trait {
+			import arm_thread
+		}
+
 		data addon_name				=	NULL
 
 		/**!
@@ -22,9 +26,7 @@
 
 				.load_registry()
 
-				.load_theme()
-				.load_theme_preferences()
-				.load_theme_language()
+				.load_theme( arm_pref( 'sys:default_theme' ))
 
 				return arm_addon( arm_path( 1 )->asstring )
 			}
@@ -66,51 +68,6 @@
 			}
 			#file_loaded ? $arm_data->find( 'registry' ) = escape_tag( arm_pref( 'sys:registry_typename' ))->invoke
 			$arm_data->find( 'registry' )->hasmethod( ::load ) ? $arm_data->find( 'registry' )->load
-		}
-
-		/**!
-		 * loads the default theme name into the $arm_data variable.
-		 * 
-		 * the theme name is set in the default preferences, but
-		 * can be overridden in the registry.
-		 */
-		private load_theme() => {
-			$arm_data->insert( 'theme_name' = arm_pref( 'sys:default_theme' ))
-		}
-		
-		/**!
-		 * if present, loads the theme preference file.
-		 */
-		private load_theme_preferences() => {
-			local( 'filepath' =
-				arm_pref( 'sys:theme_path' ) +
-				$arm_data->find( 'theme_name')  +
-				arm_pref('sys:path_delimiter') +
-				arm_pref( 'sys:preference_path' ) +
-				$arm_data->find('theme_name' ) +
-				arm_pref( 'sys:preference_suffix' ) +
-				arm_pref( 'sys:file_suffix' )
-			)
-			local( 'success' = FALSE )
-			protect => {
-				include_raw( #filepath )
-				#success = TRUE
-			}
-			#success ? library_once( #filepath )
-		}
-
-		/**!
-		 * if present, loads the theme language file(s).
-		 */
-		private load_theme_language() => {
-			arm_lang_loadfile(
-				arm_pref( 'sys:theme_path' ) +
-				$arm_data->find('theme_name' ) +
-				arm_pref('sys:path_delimiter') +
-				arm_pref( 'sys:language_path' ) +
-				$arm_data->find('theme_name' ) +
-				'.'
-			)
 		}
 
 	}

@@ -151,6 +151,14 @@
 	define Arm_View => type {
 		parent Arm_PluginView
 
+		trait {
+			import arm_thread
+		}
+
+		public theme( theme_name::string ) => {
+			.load_theme( #theme_name )
+			return self
+		}
 
 		public build( t::string ) => {
 			.'file_name' = #t
