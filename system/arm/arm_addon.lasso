@@ -7,7 +7,7 @@
 			return #addon->buffer
 		}
 
-		private start( addon_name::string ) => {
+		protected start( addon_name::string ) => {
 
 			local( 'method_name' = arm_path( 2 )->asstring )
 			local( 'addon' = VOID )
@@ -17,7 +17,7 @@
 
 				if( NOT #addon ) => {
 					#addon = .load_addon( arm_pref( 'sys:default_addon' ))
-					NOT #addon ? fail( -1, arm_lang( 'sys.controller_error', (: '@cname' = #addon_name )))
+					NOT #addon ? fail( -1, arm_lang( 'sys.controller_error', (: '@cname' = .controller_name( #addon_name ))))
 					if( .run_method( #addon, #addon_name )) => {
 						return #addon
 					}
@@ -31,7 +31,7 @@
 
 				#addon = .load_addon( arm_pref( 'sys:default_addon' ))
 				NOT #addon ? fail( -1, arm_lang( 'sys.controller_error', (: '@cname' = #addon_name )))
-				if( . run_method( #addon, '_not_found' )) => {
+				if( .run_method( #addon, '_not_found' )) => {
 					return #addon
 				}
 
@@ -46,7 +46,11 @@
 			}
 		}
 
-		private controller_path( search_path::string, addon_name::string ) => {
+		protected controller_name( addon_name::string ) => {
+			return #addon_name
+		}
+
+		protected controller_path( search_path::string, addon_name::string ) => {
 			local( 'out' = '' )
 			#out->append( #search_path )
 			#out->append( #addon_name )
@@ -57,14 +61,18 @@
 			return #out
 		}
 
-		private load_addon( addon_name::string ) => {
+		protected load_addon( addon_name::string ) => {
 
 			local( 'addon_root' = '' )
 			local( 'addon' = VOID )
 
 			local( 'success' = FALSE )
+
 			arm_pref( 'sys:addon_path' )->foreach => {
 				local( 'search_path' = #1 )
+
+				// #addon_name == 'test' && #search_path == 'system/addons/' ? fail( -5, .controller_path( #search_path, #addon_name ) )
+
 				protect => {
 					library(
 						.controller_path( #search_path, #addon_name )
@@ -85,7 +93,7 @@
 				local( 'outside_root' = $arm_data->find( 'addon_root_directory' ))
 
 				$arm_data->insert( 'addon_root_directory' = #addon_root )
-				#addon = escape_tag( #addon_name )->invoke
+				#addon = escape_tag( .controller_name( #addon_name ))->invoke
 				#addon->root_directory( #addon_root )
 
 				$arm_data->insert( 'addon_root_directory' = #outside_root )
@@ -101,7 +109,7 @@
 
 		}
 		
-		private run_method( addon::any, method_name::string ) => {
+		protected run_method( addon::any, method_name::string ) => {
 
 			if( #method_name == '' && #addon->hasmethod( ::index )) => {
 				#addon->index
@@ -122,7 +130,7 @@
 
 		}
 
-		private load_addon_preferences( addon_name::string, addon_root::string ) => {
+		protected load_addon_preferences( addon_name::string, addon_root::string ) => {
 			library_once(
 				#addon_root +
 				arm_pref( 'sys:preference_path' ) +
@@ -132,7 +140,7 @@
 			)
 		}
 
-		private load_addon_language( addon_name::string, addon_root::string ) => {
+		protected load_addon_language( addon_name::string, addon_root::string ) => {
 			arm_lang_loadfile( 
 				#addon_root +
 				arm_pref( 'sys:language_path' ) +
@@ -146,7 +154,15 @@
 	define Arm_Admin => type {
 		parent Arm_Addon
 
-		private controller_path( search_path::string, addon_name::string ) => {
+		public oncreate( name::string ) => {
+			return ..oncreate( #name )
+		}
+
+		protected controller_name( addon_name::string ) => {
+			return #addon_name + '_admin'
+		}
+
+		protected controller_path( search_path::string, addon_name::string ) => {
 			local( 'out' = '' )
 			#out->append( #search_path )
 			#out->append( #addon_name )

@@ -29,7 +29,7 @@
 			->build( 'pilot_v' )
 		}
 
-		public _not_found() => {
+		public x_not_found() => {
 			self->view
 			->set( 'out', arm_lang( 'pilot.404_welcome' ))
 			->title( 'Pilot Error 404' )

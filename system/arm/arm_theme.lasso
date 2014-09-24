@@ -1,6 +1,6 @@
 <?lassoscript
 
-	define Arm_Thread => trait {
+	define Arm_Theme => trait {
 
 		/**!
 		 * loads the default theme name into the $arm_data variable.

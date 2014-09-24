@@ -15,11 +15,6 @@
 			return self
 		}
 
-		public title( v::string ) => {
-			$arm_data->insert( 'view_title' = #v )
-			return self
-		}
-
 		public metadata( ... ) => {
 			local( 'args' = map )
 			local( 'signature' = string )
@@ -112,7 +107,7 @@
 			return self
 		}
 
-		protected dump( plugin::boolean = FALSE ) => {
+		protected dump( notheme::boolean = FALSE ) => {
 
 			.'variables'->foreach => {
 				var(#1->name = #1->value)
@@ -131,7 +126,7 @@
 
 
 
-			if( #plugin ) => {
+			if( #notheme ) => {
 				.'controller'->buffer( $arm_data->find( 'view_body' ))
 			else
 				.'controller'->buffer( include(
@@ -148,11 +143,20 @@
 		}
 	}
 
+	define Arm_AdminView => type {
+		parent Arm_PluginView
+	}
+
 	define Arm_View => type {
 		parent Arm_PluginView
 
 		trait {
-			import arm_thread
+			import arm_theme
+		}
+
+		public title( v::string ) => {
+			$arm_data->insert( 'view_title' = #v )
+			return self
 		}
 
 		public theme( theme_name::string ) => {

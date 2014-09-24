@@ -4,7 +4,7 @@
 		parent Arm_PublicController
 
 		trait {
-			import arm_thread
+			import arm_theme
 		}
 
 		data addon_name				=	NULL

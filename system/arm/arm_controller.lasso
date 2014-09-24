@@ -69,6 +69,14 @@
 			return .'view'
 		}
 
+		protected admin_view( c::string = '' ) => {
+			if( .'view'->type != Arm_AdminView->type ) => {
+				.'view' = Arm_AdminView
+				.'view'->set_controller( self )
+			}
+			return .'view'
+		}
+
 		protected load_library( c::string ) => {
 			protect => {
 				(: .pref( 'sys:library_path' ), .root_directory + .pref( 'sys:library_path' ) )->foreach => {
