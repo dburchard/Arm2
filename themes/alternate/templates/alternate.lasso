@@ -2,41 +2,41 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title><?= .view_title ?></title>
+	<title><?= arm_view( -title ) ?></title>
 
-	<?= .theme_favicon( 'favicon.ico', -rel='icon', -sizes='16x16 32x32', -type='image/png' ) ?>
+	<?= arm_theme( -favicon='favicon.ico', -rel='icon', -sizes='16x16 32x32', -type='image/png' ) ?>
 
-	<?= .theme_css( 'theme_style.css' ) ?>
+	<?= arm_theme( -css='theme_style.css' ) ?>
 
-	<?= .theme_js( 'theme_jquery.js', -group='footer' ) ?>
+	<?= arm_theme( -js='theme_jquery.js', -group='footer' ) ?>
 
-	<?= .theme_baseurl ?>
+	<?= arm_theme( -baseurl ) ?>
 
-	<?= .addon_baseurl ?>
+	<?= arm_view( -baseurl ) ?>
 
-	<?= .view_metadata ?>
+	<?= arm_view( -metadata ) ?>
 
-	<?= .view_css ?>
+	<?= arm_view( -css ) ?>
 
 </head>
 <body>
 	<div class="container">
 
-		<?= .addon_image( 'foo.png', -alt='' ) ?>
+		<?= arm_view( -image='foo.png', -alt='' ) ?>
 
-		<?= .theme_image( 'foo.png', -alt='Foo' ) ?>
+		<?= arm_theme( -image='foo.png', -alt='Foo' ) ?>
 
-		<?= .partial('head') ?>
+		<?= arm_partial( 'head' ) ?>
 
-		<?= .view_area('myarea') ?>
+		<?= arm_view( -area='myarea') ?>
 
 		<div class="main">
 			<p>This is the alternate theme.</p>
 
-			<?= .view_body ?>
+			<?= arm_view( -body ) ?>
 		</div>
 
 	</div>
-	<?= .view_js( 'footer' ) ?>
+	<?= arm_view( -js='footer' ) ?>
 </body>
 </html>

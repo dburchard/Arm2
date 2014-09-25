@@ -8,9 +8,10 @@
 	$arm_data->insert( 'view_metadata' = ARRAY )
 	$arm_data->insert( 'view_js' = MAP )
 	$arm_data->insert( 'view_css' = MAP )
+	$arm_data->insert( 'theme_js' = MAP )
+	$arm_data->insert( 'theme_css' = MAP )
 	$arm_data->insert( 'path' = ARRAY)
 
-	library_once( include_path + 'sourcefile.lasso' )
 	library_once( include_path + 'arm_path.lasso' )
 	library_once( include_path + 'arm_pref.lasso' )
 	library_once( include_path + 'arm_lang.lasso' )

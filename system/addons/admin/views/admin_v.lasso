@@ -1,3 +1,3 @@
-<?= .view_area( 'add-on-admin' ) ?>
+<?= arm_view( -area='add-on-admin' ) ?>
 
 

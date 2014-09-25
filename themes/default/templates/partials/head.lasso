@@ -1,1 +1,1 @@
-<h1>Title: <?= .view_title ?></h1>
+<h1>Title: <?= arm_view( -title ) ?></h1>

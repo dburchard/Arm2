@@ -1,8 +1,8 @@
 This is Pilot's default view:
 
-<?= .partial( 'side' ) ?>
+<?= arm_partial( 'side' ) ?>
 
-<?= .view_area( 'navigation' ) ?>
+<?= arm_view( -area='navigation' ) ?>
 
 <?= $out ?>
 

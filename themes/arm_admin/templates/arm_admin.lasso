@@ -2,33 +2,33 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title><?= .view_title ?></title>
+	<title><?= arm_view( -title ) ?></title>
 
-	<?= .theme_favicon( 'favicon.ico', -rel='icon', -sizes='16x16 32x32', -type='image/png' ) ?>
+	<?= arm_theme( -favicon='favicon.ico', -rel='icon', -sizes='16x16 32x32', -type='image/png' ) ?>
 
-	<?= .theme_css( 'theme_style.css' ) ?>
+	<?= arm_theme( -css='theme_style.css' ) ?>
 
-	<?= .theme_js( 'theme_jquery.js', -group='footer' ) ?>
+	<?= arm_theme( -js='theme_jquery.js', -group='footer' ) ?>
 
-	<?= .view_metadata ?>
+	<?= arm_view( -metadata ) ?>
 
-	<?= .view_css ?>
+	<?= arm_view( -css ) ?>
 
 </head>
 <body>
 	<div class="container">
 
-		<?= .partial('head') ?>
+		<?= arm_partial( 'head' ) ?>
 
-		<?= .view_area('myarea') ?>
+		<?= arm_view( -area='myarea') ?>
 
 			<p>This is the admin theme.</p>
 
 		<div class="main" style="border:thin solid red">
-			<?= .view_body ?>
+			<?= arm_view( -body ) ?>
 		</div>
 
 	</div>
-	<?= .view_js( 'footer' ) ?>
+	<?= arm_view( -js='footer' ) ?>
 </body>
 </html>

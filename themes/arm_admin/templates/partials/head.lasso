@@ -1,1 +1,1 @@
-<h1>Admin Title: <?= .view_title ?></h1>
+<h1>Admin Title: <?= arm_view( -title ) ?></h1>
