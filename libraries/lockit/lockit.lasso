@@ -4,7 +4,7 @@
 
 		public is_authorized( ticket::string ) => {
 
-			return FALSE
+			return TRUE
 
 		}
 

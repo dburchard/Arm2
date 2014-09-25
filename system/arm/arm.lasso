@@ -19,6 +19,9 @@
 			.load_default_language()
 			arm_path_set()
 
+			// we're surrounding all subsequent processing with
+			// an inline, so that subsequent inlines don't need
+			// to specify the host or database parameters.
 			inline(
 					web_request->params,
 					arm_pref( 'sys:database' ),
@@ -28,7 +31,22 @@
 
 				.load_theme( arm_pref( 'sys:default_theme' ))
 
-				return arm_addon( arm_path( 1 )->asstring )
+				.load_library( 'arm_auth' )
+				local( 'auth' = VOID )
+				protect => {
+					#auth = arm_auth
+				}
+
+				if( #auth->isa( ::void ) OR #auth->is_authorized( arm_path )) => {
+
+					return arm_addon( arm_path( 1 )->asstring )
+
+				else
+
+					#auth->login_screen
+
+				}
+
 			}
 
 		}

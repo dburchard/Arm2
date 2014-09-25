@@ -1,3 +1,3 @@
 This is the test-admin view:
 
-[var('out')]
+[var('out')]: [ arm_path ]

@@ -96,8 +96,8 @@
 			return self
 		}
 
-		public build( t::string ) => {
-			.'file_name' = #t
+		public build( template::string ) => {
+			.'file_name' = #template
 			.dump( TRUE )
 			return self
 		}
@@ -145,6 +145,23 @@
 
 	define Arm_AdminView => type {
 		parent Arm_PluginView
+
+		public title( package::string ) => {
+			$arm_data->insert( 'view_admintitle' = #package )
+			return self
+		}
+
+		public shortcut( name::string, slug::string, class::string = '' ) => {
+			$arm_data->find( 'view_adminshortcuts' )->type != array->type ? $arm_data->insert( 'view_adminshortcuts' = array )
+			$arm_data->find( 'view_adminshortcuts' )->insert( map( 'name' = #name, 'slug' = #slug, 'class' = #class ))
+			return self
+		}
+
+		public section( name::string, slug::string, class::string = '' ) => {
+			$arm_data->find( 'view_adminsections' )->type != array->type ? $arm_data->insert( 'view_adminsections' = array )
+			$arm_data->find( 'view_adminsections' )->insert( map( 'name' = #name, 'slug' = #slug, 'class' = #class ))
+			return self
+		}
 	}
 
 	define Arm_View => type {
@@ -154,8 +171,8 @@
 			import arm_theme
 		}
 
-		public title( v::string ) => {
-			$arm_data->insert( 'view_title' = #v )
+		public title( package::string ) => {
+			$arm_data->insert( 'view_title' = #package )
 			return self
 		}
 
@@ -164,8 +181,8 @@
 			return self
 		}
 
-		public build( t::string ) => {
-			.'file_name' = #t
+		public build( template::string ) => {
+			.'file_name' = #template
 			.dump
 			return self
 		}

@@ -5,6 +5,11 @@
 		#gp->removeleading( arm_pref('sys:path_delimiter' ))
 		$arm_data->find('path') = #gp->split( arm_pref('sys:path_delimiter' ))
 	}
+
+	define arm_path() => {
+		return $arm_data->find('path')->join( '/' )
+	}
+
 	define arm_path( segment::integer ) => {
 		if( #segment <= $arm_data->find('path')->size AND #segment > 0 ) => {
 			return( $arm_data->find('path')->get( #segment ) )
