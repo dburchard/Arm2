@@ -110,6 +110,10 @@
 		}
 		
 		protected run_method( addon::any, method_name::string ) => {
+			return .call_method( #addon, #method_name )
+		}
+		
+		protected call_method( addon::any, method_name::string ) => {
 
 			if( #method_name == '' && #addon->hasmethod( ::index )) => {
 				#addon->index
@@ -170,6 +174,12 @@
 			#out->append( arm_pref( 'sys:controller_path' ))
 			#out->append( arm_pref( 'sys:admin_filename' ))
 			#out->append( arm_pref( 'sys:file_suffix' ))
+			return #out
+		}
+
+		public run_method( addon::any, method_name::string ) => {
+			local( 'out' = .call_method( #addon, arm_path( 3 )->asstring ))
+			NOT #out ? fail( -1, arm_lang( 'sys.method_error', (: '@cname' = #addon->type->asstring, '@mname' = arm_path( 3 )->asstring )))
 			return #out
 		}
 	}

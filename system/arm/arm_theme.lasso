@@ -139,6 +139,7 @@
 				$arm_data->insert( 'theme_name' = #theme_name )
 				.load_theme_preferences()
 				.load_theme_language()
+				arm_pref( 'sys:default_theme' = #theme_name )
 			}
 		
 			/**!

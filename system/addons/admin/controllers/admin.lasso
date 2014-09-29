@@ -1,7 +1,7 @@
 <?lassoscript
 
 	define Admin => type {
-		parent Arm_PublicController
+		parent Arm_AdminController
 
 		data public _registry_required		=		FALSE
 
@@ -9,13 +9,15 @@
 			self->view
 			->theme( 'arm_admin' )
 			->title( 'Admin' )
-			->area( 'add-on-admin', arm_admin( 'test' ))
+			->area( 'addon-admin', arm_admin( 'test' ))
 			->build( 'admin_v' )
 		}
 
 		public _not_found() => {
 			self->view
-			->title( 'Admin 404' )
+			->theme( 'arm_admin' )
+			->title( 'Admin' )
+			->area( 'addon-admin', arm_admin( arm_path( 2 )->asstring ))
 			->build( 'admin_v' )
 		}
 

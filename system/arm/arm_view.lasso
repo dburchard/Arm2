@@ -15,6 +15,9 @@
 	 *     arm_view( -js::boolean )::string
 	 *     arm_view( -image::string, -alt::string = '' )::string
 	 * 
+	 *     arm_view( -section::string, -alt::string = '' )::string
+	 *     arm_view( -shortcut::string, -alt::string = '' )::string
+	 * 
 	 */
 	define Arm_View( ... ) => {
 
@@ -139,7 +142,7 @@
 			#args->find( 'group' )->type === STRING->type ? #group = #args->find( 'group' ); #args->removeall( 'group' )
 			#args->size > 0 ? fail( -1, arm_lang( 'sys.signature_error', (: '@signature' = 'arm_view( ' + #signature + ' )' )))
 			local( 'js' = $arm_data->find( 'view_js' )->find( #group ))
-			#css->type != array->type ? return ''
+			#js->type != array->type ? return ''
 			local( 'out' = array )
 			#js->foreach => {
 				#out->insert( '<script type="text/javascript" src="' + #1 + '"></script>')
@@ -157,6 +160,71 @@
 			return #out
 		}
 
+		// process -admin_title::boolean form of tag
+		if( #args->find( 'admin_title' ) === TRUE ) => {
+			#args->removeall( 'admin_title' )
+			#args->size > 0 ? fail( -1, arm_lang( 'sys.signature_error', (: '@signature' = 'arm_view( ' + #signature + ' )' )))
+			return $arm_data->find( 'view_admintitle' )
+		}
+
+		// process -admin_description::boolean form of tag
+		if( #args->find( 'admin_description' ) === TRUE ) => {
+			#args->removeall( 'admin_description' )
+			#args->size > 0 ? fail( -1, arm_lang( 'sys.signature_error', (: '@signature' = 'arm_view( ' + #signature + ' )' )))
+			return $arm_data->find( 'view_admindescription' )
+		}
+
+		// process -admin_sections::boolean form of tag
+		if( #args->find( 'admin_sections' ) === TRUE ) => {
+			#args->removeall( 'admin_sections' )
+			#args->size > 0 ? fail( -1, arm_lang( 'sys.signature_error', (: '@signature' = 'arm_view( ' + #signature + ' )' )))
+			local( 'out' = '<ol>' )
+			local( 'sections' = $arm_data->find( 'view_adminsections' ))
+			#sections->type != array->type ? return ''
+			#sections->foreach => {
+				local( 's' = #1 )
+				local( 'o' = STRING )
+				#o->append( '<li><a href="' + #s->find( 'slug' ) + '">' )
+				#o->append( #s->find( 'name' ))
+				#o->append( '</a></li>' )
+				#out->append( #o )
+			}
+			#out->append( '</ol>' )
+			return #out
+		}
+
+		// process -admin_shortcuts::boolean form of tag
+		/*
+		$arm_data->find( 'view_adminshortcuts' )->insert( map( 'name' = #name, 'slug' = #slug, 'class' = #class ))
+		<ol id="shortcuts">
+			<li><a class="help" href="#">Help</a></li>
+			<li><a class="create" href="#">Create</a></li>
+		</ol>
+		*/
+		if( #args->find( 'admin_shortcuts' ) === TRUE ) => {
+			#args->removeall( 'admin_shortcuts' )
+			#args->size > 0 ? fail( -1, arm_lang( 'sys.signature_error', (: '@signature' = 'arm_view( ' + #signature + ' )' )))
+			local( 'out' = '<ol id="shortcuts">' )
+			local( 'sections' = $arm_data->find( 'view_adminshortcuts' ))
+			#sections->type != array->type ? return ''
+			#sections->foreach => {
+				local( 's' = #1 )
+				local( 'o' = STRING )
+				#o->append( '<li><a' )
+				#s->find( 'class' ) == 'create' ? #o->append( ' class="create"' )
+				#s->find( 'class' ) == 'read' ? #o->append( ' class="read"' )
+				#s->find( 'class' ) == 'update' ? #o->append( ' class="update"' )
+				#s->find( 'class' ) == 'delete' ? #o->append( ' class="delete"' )
+				#o->append( ' href="' + #s->find( 'slug' ) + '"' )
+				#o->append( '>' )
+				#o->append( #s->find( 'name' ))
+				#o->append( '</a></li>' )
+				#out->append( #o )
+			}
+			#out->append( '</ol>' )
+			return #out
+		}
+
 		// trap for no valid parameter.
 		#args->size > 0 ? fail( -1, arm_lang( 'sys.signature_error', (: '@signature' = 'arm_view( ' + #signature + ' )' )))
 
@@ -165,6 +233,10 @@
 	}
 
 	define Arm_PluginView => type {
+
+		trait {
+			import arm_themeloader
+		}
 
 		data protected controller	=	NULL
 		data protected variables	=	ARRAY
@@ -176,6 +248,11 @@
 
 		public set( n::string, v::any ) => {
 			.'variables'->insert( pair( #n = #v ))
+			return self
+		}
+
+		public theme( theme_name::string ) => {
+			.load_theme( #theme_name )
 			return self
 		}
 
@@ -301,7 +378,7 @@
 					$arm_data->find('theme_name') + 
 					.'controller'->pref( 'sys:file_suffix')
 				)
-				$arm_data->insert( 'partial_root' = .'controller'->pref('sys:theme_path') + $arm_data->find('theme_name') + .'controller'->pref('sys:path_delimiter' ) + arm_pref( 'sys:template_path' ) + arm_pref( 'sys:partial_path' ))
+				$arm_data->insert( 'partial_root' = .'controller'->pref('sys:theme_path') + $arm_data->find('theme_name') + arm_pref('sys:path_delimiter' ) + arm_pref( 'sys:template_path' ) + arm_pref( 'sys:partial_path' ))
 				.'controller'->buffer( include( #theme_path ))
 			}
 		}
@@ -315,15 +392,23 @@
 			return self
 		}
 
+		public description( package::string ) => {
+			$arm_data->insert( 'view_admindescription' = #package )
+			return self
+		}
+
 		public shortcut( name::string, slug::string, class::string = '' ) => {
+			local( 'path' = #slug )
 			$arm_data->find( 'view_adminshortcuts' )->type != array->type ? $arm_data->insert( 'view_adminshortcuts' = array )
-			$arm_data->find( 'view_adminshortcuts' )->insert( map( 'name' = #name, 'slug' = #slug, 'class' = #class ))
+			$arm_data->find( 'view_adminshortcuts' )->insert( map( 'name' = #name, 'slug' = arm_path( 1 ) + arm_pref('sys:path_delimiter' ) + arm_path( 2 ) + arm_pref('sys:path_delimiter' ) + #path, 'class' = #class ))
 			return self
 		}
 
 		public section( name::string, slug::string, class::string = '' ) => {
+			local( 'path' = #slug )
+			#path->removeleading( arm_pref('sys:path_delimiter' ))
 			$arm_data->find( 'view_adminsections' )->type != array->type ? $arm_data->insert( 'view_adminsections' = array )
-			$arm_data->find( 'view_adminsections' )->insert( map( 'name' = #name, 'slug' = #slug, 'class' = #class ))
+			$arm_data->find( 'view_adminsections' )->insert( map( 'name' = #name, 'slug' = arm_path( 1 ) + arm_pref('sys:path_delimiter' ) + arm_path( 2 ) + arm_pref('sys:path_delimiter' ) + #path, 'class' = #class ))
 			return self
 		}
 	}
@@ -331,17 +416,8 @@
 	define Arm_ControllerView => type {
 		parent Arm_PluginView
 
-		trait {
-			import arm_themeloader
-		}
-
 		public title( package::string ) => {
 			$arm_data->insert( 'view_title' = #package )
-			return self
-		}
-
-		public theme( theme_name::string ) => {
-			.load_theme( #theme_name )
 			return self
 		}
 

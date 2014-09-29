@@ -1,0 +1,592 @@
+/* Here is a minor change */
+/*
+	* Gridless version 2.0
+
+	* Credit is left inline and big thanks to Nicolas Gallagher and Jonathan Neal
+
+	* Across this document we use safe CSS hacks: http://mathiasbynens.be/notes/safe-css-hacks
+	* Selectors beggining with an underscore (_selector: property) target only IE6
+	* Selectors beggining with an asterisk (*selector: property) target only IE6 and IE7
+*/
+/* HTML5 display definitions
+---------------------------------------- */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+dialog {
+  display: block;
+}
+/* Corrects inline-block not defined in IE6/7/8 and FF3 */
+audio,
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+audio:not([controls]) {
+  display: none;
+}
+/* Ensures content is hidden from all presentations, including screenreaders */
+[hidden] {
+  display: none;
+  visibility: hidden;
+}
+/* Base structure
+---------------------------------------- */
+/*
+	* The body will work like a 'div#wrapper' (for this to work, the 'body' needs to have a set width)
+
+	* To add a background to the PAGE, set it in the 'html' element
+	* To add a background to the WRAPPER, set it in the 'body' element
+*/
+html {
+  height: 16pt;
+  font-size: 100%;
+  overflow-y: scroll;
+  /* Force a scrollbar in non-IE */
+
+  -webkit-text-size-adjust: 100%;
+  /* Prevent iOS text size adjust on orientation change without disabling user zoom */
+
+  -ms-text-size-adjust: 100%;
+}
+body {
+  margin: 0 auto;
+  min-height: 100%;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+/* Fonts settings based on the 100E2R standard: http://www.informationarchitects.jp/en/100e2r/ */
+body,
+button,
+input,
+select,
+textarea {
+  font: 1em/1.625 Georgia, serif;
+  color: #222;
+  /* Full black on white is too much contrast, #222 is a better default */
+
+}
+/* Add and/or remove tags as your baseline grid needs */
+p,
+blockquote,
+q,
+pre,
+address,
+hr,
+code,
+samp,
+dl,
+ol,
+ul,
+form,
+table,
+fieldset,
+menu,
+h4,
+h5,
+h6,
+img,
+figure,
+figcaption,
+button,
+hr {
+  margin: 0 0 1.625em;
+}
+/* Links
+---------------------------------------- */
+a,
+a:visited {
+  text-decoration: none;
+  color: red;
+  border-bottom: 1px solid;
+}
+a:focus {
+  outline: thin dotted;
+}
+/* Better CSS outline suppression: people.opera.com/patrickl/experiments/keyboard/test */
+a:hover,
+a:active {
+  outline: none;
+}
+/* Headings/small
+---------------------------------------- */
+/*
+	* Font sizes are based on the golden ratio of 16
+	* See this for the modular scale: ow.ly/5jGl6
+	* Line-heights and margins are adjusted to keep a 26px (1.625em) vertical rhythm across elements 
+*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a,
+h1 a:visited,
+h2 a:visited,
+h3 a:visited,
+h4 a:visited,
+h5 a:visited,
+h6 a:visited {
+  border: none;
+}
+h1 {
+  font-size: 1.5em;
+  line-height: 1.5em;
+  margin: 0 0 0.7em;
+}
+h2 {
+  font-size: 1.3em;
+  /* 26px */
+
+  line-height: 1.25em;
+  margin: 0 0 0.6em;
+}
+h3 {
+  font-size: 1.1em;
+  font-style: italic;
+  line-height: 1em;
+  margin: 0 0 0.5em;
+}
+h4 {
+  line-height: 1em;
+  margin: 0 0 0.5em;
+}
+h5 {
+  font-size: .9em;
+  font-style: italic;
+  font-weight: normal;
+  line-height: 1em;
+  margin: 0 0 0.5em;
+}
+h6 {
+  font-size: .8em;
+  font-weight: normal;
+  line-height: 1em;
+  margin: 0 0 0.5em;
+}
+small {
+  font-size: 0.625em;
+  /* 10px */
+
+  margin: 0 0 2.6em;
+}
+/* Preformatted text and code
+---------------------------------------- */
+/* Allows line wrapping of 'pre' */
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+pre,
+code,
+kbd,
+samp {
+  font: 1em/1.625em Menlo, Consolas, 'DejaVu Sans Mono', Monaco, 'Courier New', Courier, monospace;
+}
+/* Tables
+---------------------------------------- */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+th {
+  text-align: left;
+}
+tr,
+th,
+td {
+  padding-right: 1.625em;
+}
+/* Forms
+---------------------------------------- */
+form {
+  margin: 0;
+}
+fieldset {
+  border: 0;
+  padding: 0;
+}
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
+legend {
+  border: 0;
+  *margin-left: -7px;
+}
+button,
+input,
+select,
+textarea {
+  vertical-align: baseline;
+  *vertical-align: middle;
+}
+button,
+input {
+  line-height: normal;
+  *overflow: visible;
+}
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+/* Reintroduce inner spacing in 'table' to avoid overlap and whitespace issues in IE6/7 */
+table button,
+table input {
+  *overflow: auto;
+}
+/* Quotes
+---------------------------------------- */
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+blockquote,
+q,
+cite {
+  font-style: italic;
+}
+blockquote {
+  padding-left: 1.625em;
+  border-left: 1px solid #ddd;
+}
+blockquote > p {
+  padding: 0;
+}
+/* Lists
+---------------------------------------- */
+ul,
+ol {
+  list-style-position: inside;
+  padding: 0;
+}
+li ul,
+li ol {
+  margin: 0 1.625em;
+}
+dl dd {
+  margin-left: 1.625em;
+}
+/* Figures
+---------------------------------------- */
+figure {
+  margin: 0;
+}
+/* Embedded content
+---------------------------------------- */
+img,
+object,
+video {
+  max-width: 100%;
+  /* Automatically scales images larger than the container. Consider this first: http://unstoppablerobotninja.com/entry/fluid-images/ */
+
+  /* _width: 100%; /* IE6 doesn't support max-width, so we just use width. If the image is larger than the container, just uncomment this. If it is smaller than the container, uncomment and change the 100% value to an absolute one */
+
+}
+img {
+  border: 0;
+  -ms-interpolation-mode: bicubic;
+  /* Improve IE's resizing of images: css-tricks.com/ie-fix-bicubic-scaling-for-images */
+
+}
+/* Corrects overflow displayed oddly in IE9 */
+svg:not(:root) {
+  overflow: hidden;
+}
+/* Abbreviations
+---------------------------------------- */
+abbr[title],
+dfn[title] {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+/* Marked/inserted/deleted text
+---------------------------------------- */
+mark {
+  background: #ff0;
+}
+ins {
+  text-decoration: none;
+  background: #ff9;
+}
+del {
+  text-decoration: line-through;
+}
+/* Others
+---------------------------------------- */
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+strong,
+b,
+dt {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+var,
+address {
+  font-style: normal;
+}
+/* Position 'sub' and 'sup' without affecting line-height: gist.github.com/413930 */
+sub,
+sup {
+  font-size: 0.625em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+/* Helper classes
+---------------------------------------- */
+/*
+	* Micro clearfix hack, more semantically titled with 'group'
+	* Source: nicolasgallagher.com/micro-clearfix-hack/
+*/
+.group:before,
+.group:after {
+  content: "";
+  display: table;
+}
+.group:after {
+  clear: both;
+}
+.group {
+  *zoom: 1;
+}
+body {
+  width: 100%;
+  *zoom: 1;
+}
+body:before,
+body:after {
+  content: "";
+  display: table;
+}
+body:after {
+  clear: both;
+}
+li {
+  list-style-position: outside;
+  margin-left: 1em;
+}
+pre {
+  overflow: auto;
+  white-space: pre;
+  border: thin #f0f0f0 solid;
+  padding: 1em;
+  font-family: inherit;
+  tab-size: 4;
+}
+code {
+  font-family: monospace;
+  word-wrap: normal;
+}
+dd {
+  margin-bottom: 0.5em;
+}
+body {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  background: #f3f3ff;
+}
+/* header
+------------------------------------------------*/
+#header {
+  background: #4b4b4b;
+  text-align: right;
+  padding: 2px 1.5em;
+}
+#nav {
+  background: initial;
+  color: #e5e5e5;
+  display: inline-block;
+  margin: 0 2px;
+  font-size: 0.75em;
+  line-height: 26px;
+  text-transform: lowercase;
+}
+#nav a {
+  color: #d7d7ff;
+  border: thin solid #4b4b4b;
+}
+#nav a:hover {
+  border-bottom: thin solid #d7d7ff;
+}
+#nav li {
+  display: inline-block;
+}
+#nav li ol {
+  display: none;
+}
+#branding {
+  display: inline-block;
+  float: right;
+  background: initial;
+  color: #d7d7ff;
+  font-size: 1em;
+  font-weight: normal;
+  white-space: nowrap;
+  margin: 0 0 0 1.5em;
+  border: thin solid #4b4b4b;
+}
+#branding:after {
+  content: url("images/arm_logo_22x18.png");
+  vertical-align: middle;
+  margin: 2px 0 0 0.5em;
+}
+/* sub-header
+------------------------------------------------*/
+#sub-header {
+  background: #d7d7ff;
+  color: #4b4b4b;
+  line-height: 30px;
+  white-space: nowrap;
+  padding: 0.1em 1em 0;
+}
+#sub-header #name {
+  display: inline-block;
+  float: left;
+  color: white;
+  font-size: 1.2em;
+  margin: 0 1em 0 0;
+}
+#sub-header #description {
+  display: inline-block;
+  font-size: 0.75em;
+  margin: 0;
+}
+#sub-header #help {
+  display: inline-block;
+  text-transform: lowercase;
+  line-height: 12px;
+  margin: 0 0 0 1em;
+  color: #4b4b4b;
+  border: none;
+}
+#sub-header #help:hover {
+  border-bottom: thin solid #4b4b4b;
+}
+#sub-header #shortcuts {
+  display: inline-block;
+  float: right;
+  font-size: 0.75em;
+  text-transform: lowercase;
+  margin: 2px 0.75em 0 0;
+}
+#sub-header #shortcuts li {
+  display: inline-block;
+}
+#sub-header #shortcuts a {
+  color: #4b4b4b;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: thin solid #4b4b4b;
+  padding: 2px 10px;
+}
+a.create:before {
+  content: "+ ";
+}
+a.delete:before {
+  content: "- ";
+}
+#sub-header #shortcuts a:hover {
+  background: #4b4b4b;
+  color: #d7d7ff;
+}
+/* sub-nav
+------------------------------------------------*/
+#sub-nav {
+  background: white;
+  padding: 0.2em 0.1em 0.3em;
+}
+#sub-nav h2 {
+  display: none;
+}
+#sub-nav ol {
+  margin: 0;
+}
+#sub-nav li {
+  display: inline-block;
+}
+#sub-nav li a {
+  color: #4b4b4b;
+  border: none;
+  font-size: 0.75em;
+}
+#sub-nav li a:hover {
+  border-bottom: thin solid #4b4b4b;
+}
+/* container
+------------------------------------------------*/
+#container {
+  padding-bottom: 3em;
+  width: 960px;
+  padding: 1em;
+  margin: 1em auto;
+}
+@media screen and (min-width: 768px) {
+  
+}
+@media screen and (min-width: 992px) {
+  
+}
+@media screen and (min-width: 1200px) {
+  
+}
